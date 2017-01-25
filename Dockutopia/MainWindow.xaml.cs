@@ -15,14 +15,29 @@ using System.Windows.Shapes;
 
 namespace Dockutopia
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
+
     public partial class MainWindow : Window
     {
         public MainWindow()
         {
             InitializeComponent();
+            //TODO Temp font setting
+            this.FontFamily = new FontFamily("Lucida Sans Typewriter");
+            //this.FontSize = 8;
+        }
+
+        private void textBoxCommand_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                textBoxCommand.SelectAll();
+
+            }
+        }
+
+        private void textBoxOutput_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            textBoxOutput.ScrollToEnd();
         }
     }
 }
