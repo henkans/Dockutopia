@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Windows.Input;
 using Dockutopia.Foundation;
 using Dockutopia.Model;
@@ -13,10 +15,12 @@ namespace Dockutopia.ViewModels
         public MainViewModel()
         {
             RunDockerCommand = new RelayCommand<object>(RunDocker);
+            GetPreviousInputCommand = new RelayCommand(GetPreviousInput);
+            GetNextInputCommand = new RelayCommand(GetNextInput);
+            _inputStack = new Stack<string>();
         }
 
         private string _outputText;
-
         public string OutputText
         {
             get { return _outputText; }
@@ -27,12 +31,52 @@ namespace Dockutopia.ViewModels
             }
         }
 
+        private string _commandText;
+        public string CommandText
+        {
+            get { return _commandText; }
+            set
+            {
+                _commandText = value;
+                this.OnPropertyChanged();
+            }
+        }
+
+
+        private int inputIndex = -1;
+        private static Stack<string> _inputStack;
+        public ICommand GetPreviousInputCommand { get; set; }
+        private void GetPreviousInput()
+        {
+            if (_inputStack.Count > (inputIndex + 1))
+            {
+                CommandText = _inputStack.ElementAt(inputIndex + 1);
+                inputIndex++;
+            }
+        }
+
+        public ICommand GetNextInputCommand { get; set; }
+        private void GetNextInput()
+        {
+            if (0 < inputIndex)
+            {
+                CommandText = _inputStack.ElementAt(inputIndex - 1);
+                inputIndex--;
+            }
+        }
+
+
         public ICommand RunDockerCommand { get; set; }
 
         private void RunDocker(object inputCommand)
         {
             var command = inputCommand as string;
             command = StringHelper.RemoveDockerFirstOccurrence(command);
+
+            _inputStack.Push(command);
+            CommandText = string.Empty;
+            inputIndex = -1;
+
             OutputText += ">>> docker " + command + Environment.NewLine + Environment.NewLine;
 
             try

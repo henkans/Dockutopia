@@ -33,6 +33,10 @@ namespace Dockutopia
                 textBoxCommand.SelectAll();
 
             }
+            if (e.Key == Key.Up || e.Key == Key.Down)
+            {
+                textBoxCommand.CaretIndex = textBoxCommand.Text.Length;
+            }
         }
 
         private void textBoxOutput_TextChanged(object sender, TextChangedEventArgs e)

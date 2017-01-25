@@ -30,9 +30,12 @@
             </Grid.RowDefinitions>
 
             <TextBox Grid.Row="0" x:Name="textBoxOutput" IsReadOnly="True" Text="{Binding OutputText, Mode=TwoWay}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" TextWrapping="NoWrap" AcceptsReturn="True" MinHeight="200" MaxHeight="400"  ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Visible" TextChanged="textBoxOutput_TextChanged" />
-            <TextBox Grid.Row="1" x:Name="textBoxCommand" HorizontalAlignment="Stretch" Height="23" TextWrapping="Wrap" Text="" VerticalAlignment="Top" KeyUp="textBoxCommand_KeyUp">
+            <TextBox Grid.Row="1" x:Name="textBoxCommand" HorizontalAlignment="Stretch" Height="23" TextWrapping="Wrap" Text="{Binding CommandText}" VerticalAlignment="Top" KeyUp="textBoxCommand_KeyUp">
                 <TextBox.InputBindings>
                     <KeyBinding Key="Enter" Command="{Binding RunDockerCommand}" CommandParameter="{Binding Text, ElementName=textBoxCommand}"/>
+
+                    <KeyBinding Key="Up" Command="{Binding GetPreviousInputCommand}" />
+                    <KeyBinding Key="Down" Command="{Binding GetNextInputCommand}" />
                 </TextBox.InputBindings>
             </TextBox>
 
