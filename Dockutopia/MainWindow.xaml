@@ -18,6 +18,18 @@
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
+        <!-- top grid -->
+        <Grid Grid.Row="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+
+            <ListBox Grid.Row="0" x:Name="listBoxImages" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+            <ListBox Grid.Row="1" x:Name="listBoxContainers" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+
+        </Grid>
+        
 
         <!-- grid splitter -->
         <GridSplitter Grid.Row="1" Height="10" HorizontalAlignment="Stretch" />
