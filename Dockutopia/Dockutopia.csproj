@@ -55,10 +55,17 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Converters\IpCommandParamConverter.cs" />
+    <Compile Include="Converters\StartCommandParamConverter.cs" />
+    <Compile Include="Converters\StopCommandParamConverter.cs" />
+    <Compile Include="Model\DockerContainer.cs" />
+    <Compile Include="Model\DockerImage.cs" />
+    <Compile Include="Utils\ContainerStringParser.cs" />
     <Compile Include="Utils\StringHelper.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
     <Compile Include="ViewModels\ViewModelBase.cs" />
     <Compile Include="Wrapper\DockerWrapper.cs" />
+    <Compile Include="Wrapper\IDockerWrapper.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

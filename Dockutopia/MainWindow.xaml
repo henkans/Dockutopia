@@ -5,17 +5,26 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Dockutopia"
         xmlns:vm="clr-namespace:Dockutopia.ViewModels"
+        xmlns:converters="clr-namespace:Dockutopia.Converters"
         mc:Ignorable="d"
-        Title="Dockutopia" Height="600" Width="800">
+        Title="Dockutopia" Height="600" Width="800" Loaded="Window_Loaded" ResizeMode="CanResizeWithGrip">
     <Window.DataContext>
         <vm:MainViewModel />
     </Window.DataContext>
-
+    <Window.InputBindings>
+        <KeyBinding Key="F5" Command="{Binding RunDockerImagesListCommand}" />
+        <KeyBinding Key="F6" Command="{Binding RunDockerContainerListCommand}" />
+    </Window.InputBindings>
+    <Window.Resources>
+        <converters:StartCommandParamConverter x:Key="startCommandParamConverter" />
+        <converters:StopCommandParamConverter x:Key="stopCommandParamConverter" />
+        <converters:IpCommandParamConverter x:Key="ipCommandParamConverter" />
+    </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
             <RowDefinition Height="10" />
-            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
         <!-- top grid -->
@@ -25,14 +34,47 @@
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
 
-            <ListBox Grid.Row="0" x:Name="listBoxImages" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
-            <ListBox Grid.Row="1" x:Name="listBoxContainers" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+            <ListView Grid.Row="0" x:Name="listBoxImages" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" ItemsSource="{Binding DockerImages}">
+                <ListView.View>
+                    <GridView>
+                        <GridViewColumn Header="Repository" DisplayMemberBinding="{Binding Repository}" />
+                        <GridViewColumn Header="Tag" DisplayMemberBinding="{Binding Tag}" />
+                        <GridViewColumn Header="Image ID" DisplayMemberBinding="{Binding ImageId}" />
+                        <GridViewColumn Header="Size" DisplayMemberBinding="{Binding Size}" />
+                        <GridViewColumn Header="Created" DisplayMemberBinding="{Binding Created}" />
+                    </GridView>
+                </ListView.View>
+            </ListView>
+
+
+            <ListView Grid.Row="1" x:Name="listBoxContainers" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" ItemsSource="{Binding DockerContainers}" SelectedItem="{Binding SelectedDockerContainer}">
+                <ListView.View>
+                    <GridView>
+                        <GridViewColumn Header="ContainerId" DisplayMemberBinding="{Binding ContainerId}" />
+                        <GridViewColumn Header="Image" DisplayMemberBinding="{Binding Image}" />
+                        <GridViewColumn Header="Command" DisplayMemberBinding="{Binding Command}" />
+                        <GridViewColumn Header="Running for" DisplayMemberBinding="{Binding RunningFor}" />
+                        <GridViewColumn Header="Status" DisplayMemberBinding="{Binding Status}" />
+                        <GridViewColumn Header="Ports" DisplayMemberBinding="{Binding Ports}" />
+                        <GridViewColumn Header="Names" DisplayMemberBinding="{Binding Names}" />
+                    </GridView>
+                </ListView.View>
+                <ListView.ContextMenu >
+                    <ContextMenu Background="DimGray" MinWidth="150">
+                        <MenuItem Header="   Start" Command="{Binding RunDockerCommand}" CommandParameter="{Binding SelectedDockerContainer.Names, Converter={StaticResource startCommandParamConverter}}"/>
+                        <MenuItem Header="   Stop" Command="{Binding RunDockerCommand}" CommandParameter="{Binding SelectedDockerContainer.Names, Converter={StaticResource stopCommandParamConverter}}"/>
+                        <MenuItem Header="   View IP" Command="{Binding RunDockerCommand}" CommandParameter="{Binding SelectedDockerContainer.ContainerId, Converter={StaticResource ipCommandParamConverter}}"/>
+
+
+                    </ContextMenu>
+                </ListView.ContextMenu>
+            </ListView>
 
         </Grid>
         
 
         <!-- grid splitter -->
-        <GridSplitter Grid.Row="1" Height="10" HorizontalAlignment="Stretch" />
+        <GridSplitter Grid.Row="1" Height="10" HorizontalAlignment="Stretch" Background="DimGray"/>
 
         <!-- bottom grid -->
         <Grid Grid.Row="2">
@@ -41,7 +83,18 @@
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
 
-            <TextBox Grid.Row="0" x:Name="textBoxOutput" IsReadOnly="True" Text="{Binding OutputText, Mode=TwoWay}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" TextWrapping="NoWrap" AcceptsReturn="True" MinHeight="200" MaxHeight="400"  ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Visible" TextChanged="textBoxOutput_TextChanged" />
+            <RichTextBox Grid.Row="0" x:Name="textBoxOutput" IsReadOnly="True"  HorizontalAlignment="Stretch" VerticalAlignment="Stretch"  AcceptsReturn="True" MinHeight="200" ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Visible" TextChanged="textBoxOutput_TextChanged">
+                <FlowDocument>
+                    <Paragraph>
+                        <Run Text="Dockutopia [Version 0.0.14393]" />
+                        <LineBreak />
+                        <Run Text="no (c) Free as in both 'free speech' and 'free beer'." />
+                        <LineBreak />
+                        
+                        <Run Text="{Binding Path=OutputText}" />
+                    </Paragraph>
+                    </FlowDocument>
+            </RichTextBox>
             <TextBox Grid.Row="1" x:Name="textBoxCommand" HorizontalAlignment="Stretch" Height="23" TextWrapping="Wrap" Text="{Binding CommandText}" VerticalAlignment="Top" KeyUp="textBoxCommand_KeyUp">
                 <TextBox.InputBindings>
                     <KeyBinding Key="Enter" Command="{Binding RunDockerCommand}" CommandParameter="{Binding Text, ElementName=textBoxCommand}"/>

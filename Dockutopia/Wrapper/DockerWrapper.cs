@@ -4,7 +4,7 @@ using Dockutopia.Model;
 
 namespace Dockutopia.Wrapper
 {
-    public class DockerWrapper
+    public class DockerWrapper : IDockerWrapper
     {
         private readonly Process _process;
 

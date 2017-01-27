@@ -16,7 +16,8 @@
 
     <Color x:Key="MainColor">#FF595959</Color>
     <Color x:Key="HoverColor">#FF393939</Color>
-    <Color x:Key="DefaultColor">#FF9BB1C5</Color>
+    <!--<Color x:Key="DefaultColor">#FF9BB1C5</Color>-->
+    <Color x:Key="DefaultColor">#333333</Color>
     <SolidColorBrush x:Key="LightBrush" Color="#FF333333" />
     <SolidColorBrush x:Key="ShadeBrush" Color="#FF434343" />
 
