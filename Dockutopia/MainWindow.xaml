@@ -12,8 +12,7 @@
         <vm:MainViewModel />
     </Window.DataContext>
     <Window.InputBindings>
-        <KeyBinding Key="F5" Command="{Binding RunDockerImagesListCommand}" />
-        <KeyBinding Key="F6" Command="{Binding RunDockerContainerListCommand}" />
+        <KeyBinding Key="F5" Command="{Binding RefreshUiCommand}" />
     </Window.InputBindings>
     <Window.Resources>
         <converters:StartCommandParamConverter x:Key="startCommandParamConverter" />
@@ -34,7 +33,7 @@
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
 
-            <ListView Grid.Row="0" x:Name="listBoxImages" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" ItemsSource="{Binding DockerImages}">
+            <ListView Grid.Row="0" x:Name="listBoxImages" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" ItemsSource="{Binding DockerImagesListHandler.DockerImages}">
                 <ListView.View>
                     <GridView>
                         <GridViewColumn Header="Repository" DisplayMemberBinding="{Binding Repository}" />
@@ -47,7 +46,7 @@
             </ListView>
 
 
-            <ListView Grid.Row="1" x:Name="listBoxContainers" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" ItemsSource="{Binding DockerContainers}" SelectedItem="{Binding SelectedDockerContainer}">
+            <ListView Grid.Row="1" x:Name="listBoxContainers" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" ItemsSource="{Binding DockerContainerListHandler.DockerContainers}" SelectedItem="{Binding DockerContainerListHandler.SelectedDockerContainer}">
                 <ListView.View>
                     <GridView>
                         <GridViewColumn Header="ContainerId" DisplayMemberBinding="{Binding ContainerId}" />
@@ -61,9 +60,9 @@
                 </ListView.View>
                 <ListView.ContextMenu >
                     <ContextMenu Background="DimGray" MinWidth="150">
-                        <MenuItem Header="   Start" Command="{Binding RunDockerCommand}" CommandParameter="{Binding SelectedDockerContainer.Names, Converter={StaticResource startCommandParamConverter}}"/>
-                        <MenuItem Header="   Stop" Command="{Binding RunDockerCommand}" CommandParameter="{Binding SelectedDockerContainer.Names, Converter={StaticResource stopCommandParamConverter}}"/>
-                        <MenuItem Header="   View IP" Command="{Binding RunDockerCommand}" CommandParameter="{Binding SelectedDockerContainer.ContainerId, Converter={StaticResource ipCommandParamConverter}}"/>
+                        <MenuItem Header="   Start" Command="{Binding DockerHandler.RunDockerCommand}" CommandParameter="{Binding DockerContainerListHandler.SelectedDockerContainer.Names, Converter={StaticResource startCommandParamConverter}}"/>
+                        <MenuItem Header="   Stop" Command="{Binding DockerHandler.RunDockerCommand}" CommandParameter="{Binding DockerContainerListHandler.SelectedDockerContainer.Names, Converter={StaticResource stopCommandParamConverter}}"/>
+                        <MenuItem Header="   View IP" Command="{Binding DockerHandler.RunDockerCommand}" CommandParameter="{Binding DockerContainerListHandler.SelectedDockerContainer.ContainerId, Converter={StaticResource ipCommandParamConverter}}"/>
 
 
                     </ContextMenu>
@@ -91,16 +90,15 @@
                         <Run Text="no (c) Free as in both 'free speech' and 'free beer'." />
                         <LineBreak />
                         
-                        <Run Text="{Binding Path=OutputText}" />
+                        <Run Text="{Binding Path=DockerHandler.OutputText}" />
                     </Paragraph>
                     </FlowDocument>
             </RichTextBox>
-            <TextBox Grid.Row="1" x:Name="textBoxCommand" HorizontalAlignment="Stretch" Height="23" TextWrapping="Wrap" Text="{Binding CommandText}" VerticalAlignment="Top" KeyUp="textBoxCommand_KeyUp">
+            <TextBox Grid.Row="1" x:Name="textBoxCommand" HorizontalAlignment="Stretch" Height="23" TextWrapping="Wrap" Text="{Binding PreviousCommandHandler.CommandText}" VerticalAlignment="Top" KeyUp="textBoxCommand_KeyUp">
                 <TextBox.InputBindings>
-                    <KeyBinding Key="Enter" Command="{Binding RunDockerCommand}" CommandParameter="{Binding Text, ElementName=textBoxCommand}"/>
-
-                    <KeyBinding Key="Up" Command="{Binding GetPreviousInputCommand}" />
-                    <KeyBinding Key="Down" Command="{Binding GetNextInputCommand}" />
+                    <KeyBinding Key="Enter" Command="{Binding OnEnterPressCommand}" CommandParameter="{Binding Text, ElementName=textBoxCommand}"/>
+                    <KeyBinding Key="Up" Command="{Binding PreviousCommandHandler.GetPreviousInputCommand}" />
+                    <KeyBinding Key="Down" Command="{Binding PreviousCommandHandler.GetNextInputCommand}" />
                 </TextBox.InputBindings>
             </TextBox>
 

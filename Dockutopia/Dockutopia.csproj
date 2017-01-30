@@ -58,6 +58,10 @@
     <Compile Include="Converters\IpCommandParamConverter.cs" />
     <Compile Include="Converters\StartCommandParamConverter.cs" />
     <Compile Include="Converters\StopCommandParamConverter.cs" />
+    <Compile Include="Handlers\DockerHandler.cs" />
+    <Compile Include="Handlers\DockerListHandler.cs" />
+    <Compile Include="Handlers\DockerListHandlerImg.cs" />
+    <Compile Include="Handlers\PreviousCommandHandler.cs" />
     <Compile Include="Model\DockerContainer.cs" />
     <Compile Include="Model\DockerImage.cs" />
     <Compile Include="Utils\ContainerStringParser.cs" />
