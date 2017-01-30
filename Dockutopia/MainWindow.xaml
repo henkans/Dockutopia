@@ -4,20 +4,20 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Dockutopia"
-        xmlns:vm="clr-namespace:Dockutopia.ViewModels"
-        xmlns:converters="clr-namespace:Dockutopia.Converters"
+        xmlns:viewModel="clr-namespace:Dockutopia.ViewModel"
+        xmlns:converter="clr-namespace:Dockutopia.Converter"
         mc:Ignorable="d"
         Title="Dockutopia" Height="600" Width="800" Loaded="Window_Loaded" ResizeMode="CanResizeWithGrip">
     <Window.DataContext>
-        <vm:MainViewModel />
+        <viewModel:MainNotifyPropertyChanged />
     </Window.DataContext>
     <Window.InputBindings>
         <KeyBinding Key="F5" Command="{Binding RefreshUiCommand}" />
     </Window.InputBindings>
     <Window.Resources>
-        <converters:StartCommandParamConverter x:Key="startCommandParamConverter" />
-        <converters:StopCommandParamConverter x:Key="stopCommandParamConverter" />
-        <converters:IpCommandParamConverter x:Key="ipCommandParamConverter" />
+        <converter:StartCommandParamConverter x:Key="startCommandParamConverter" />
+        <converter:StopCommandParamConverter x:Key="stopCommandParamConverter" />
+        <converter:IpCommandParamConverter x:Key="ipCommandParamConverter" />
     </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
@@ -85,7 +85,7 @@
             <RichTextBox Grid.Row="0" x:Name="textBoxOutput" IsReadOnly="True"  HorizontalAlignment="Stretch" VerticalAlignment="Stretch"  AcceptsReturn="True" MinHeight="200" ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Visible" TextChanged="textBoxOutput_TextChanged">
                 <FlowDocument>
                     <Paragraph>
-                        <Run Text="Dockutopia [Version 0.0.14393]" />
+                        <Run Text="Dockutopia [Version 0.0.1]" />
                         <LineBreak />
                         <Run Text="no (c) Free as in both 'free speech' and 'free beer'." />
                         <LineBreak />

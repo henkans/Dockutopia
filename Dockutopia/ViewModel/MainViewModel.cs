@@ -1,17 +1,17 @@
 ﻿using System.Windows.Input;
 using Dockutopia.Foundation;
-using Dockutopia.Handlers;
+using Dockutopia.Handler;
 
-namespace Dockutopia.ViewModels
+namespace Dockutopia.ViewModel
 {
-    public class MainViewModel : ViewModelBase
+    public class MainNotifyPropertyChanged : NotifyPropertyChangedBase
     {
         
-        public MainViewModel()
+        public MainNotifyPropertyChanged()
         {
             DockerHandler = new DockerHandler();
-            DockerContainerListHandler = new DockerListHandler();
-            DockerImagesListHandler = new DockerListHandlerImg(); //Temp. make generic with DockerListHandler
+            DockerContainerListHandler = new DockerContainerListHandler();
+            DockerImagesListHandler = new DockerImageListHandler(); //Temp. make generic with DockerListHandler
             PreviousCommandHandler = new PreviousCommandHandler();
 
             //To run multiple commands...
@@ -21,8 +21,8 @@ namespace Dockutopia.ViewModels
         }
 
         public DockerHandler DockerHandler { get; set; }
-        public DockerListHandler DockerContainerListHandler { get; set; }
-        public DockerListHandlerImg DockerImagesListHandler { get; set; }
+        public DockerContainerListHandler DockerContainerListHandler { get; set; }
+        public DockerImageListHandler DockerImagesListHandler { get; set; }
         public PreviousCommandHandler PreviousCommandHandler { get; set; }
 
         public ICommand OnEnterPressCommand { get; set; }

@@ -2,11 +2,11 @@
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
-namespace Dockutopia.ViewModels
+namespace Dockutopia.Foundation
 {
 
 
-    public abstract class ViewModelBase : INotifyPropertyChanged, IDisposable
+    public abstract class NotifyPropertyChangedBase : INotifyPropertyChanged, IDisposable
     {
         public void Dispose()
         {

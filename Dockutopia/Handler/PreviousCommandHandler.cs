@@ -1,15 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Input;
 using Dockutopia.Foundation;
-using Dockutopia.ViewModels;
 
-namespace Dockutopia.Handlers
+namespace Dockutopia.Handler
 {
-    public class PreviousCommandHandler : ViewModelBase
+    public class PreviousCommandHandler : NotifyPropertyChangedBase
 
 {
         public PreviousCommandHandler()
@@ -21,13 +17,6 @@ namespace Dockutopia.Handlers
         }
 
 
-    // lastinputhandlar!!!!!
-    //if (_inputStack.Count == 0 || _inputStack.Peek() != command)
-    //{
-    //    _inputStack.Push(command);
-    //}
-    //CommandText = string.Empty;
-    //inputIndex = -1;
 
 
     private string _commandText;

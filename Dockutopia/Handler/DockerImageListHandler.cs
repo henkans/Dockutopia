@@ -1,22 +1,17 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using Dockutopia.Foundation;
 using Dockutopia.Model;
+using Dockutopia.Repository;
 using Dockutopia.Utils;
-using Dockutopia.ViewModels;
-using Dockutopia.Wrapper;
 
-namespace Dockutopia.Handlers
+namespace Dockutopia.Handler
 {
-    public class DockerListHandlerImg:ViewModelBase
+    public class DockerImageListHandler:NotifyPropertyChangedBase
     {
-        public DockerListHandlerImg()
+        public DockerImageListHandler()
         {
             RunDockerImagesListCommand = new RelayCommand(RunDockerImagesList);
             _dockerImages = new ObservableCollection<DockerImage>();
@@ -43,7 +38,7 @@ namespace Dockutopia.Handlers
             try
             {
                 // Run command...
-                DockerWrapper dockerWrapper = new DockerWrapper(DockerImage.Command);
+                DockerRepository dockerWrapper = new DockerRepository(DockerImage.Command);
                 //dockerWrapper.Exited += DockerWrapper_Exited;
                 dockerWrapper.OutputDataReceived += DockerImageList_DataReceived;
                 dockerWrapper.ErrorDataReceived += DockerImageList_DataReceived;

@@ -55,21 +55,23 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Converters\IpCommandParamConverter.cs" />
-    <Compile Include="Converters\StartCommandParamConverter.cs" />
-    <Compile Include="Converters\StopCommandParamConverter.cs" />
-    <Compile Include="Handlers\DockerHandler.cs" />
-    <Compile Include="Handlers\DockerListHandler.cs" />
-    <Compile Include="Handlers\DockerListHandlerImg.cs" />
-    <Compile Include="Handlers\PreviousCommandHandler.cs" />
+    <Compile Include="Converter\IpCommandParamConverter.cs" />
+    <Compile Include="Converter\StartCommandParamConverter.cs" />
+    <Compile Include="Converter\StopCommandParamConverter.cs" />
+    <Compile Include="Handler\DockerHandler.cs" />
+    <Compile Include="Handler\DockerContainerListHandler.cs" />
+    <Compile Include="Handler\DockerImageListHandler.cs" />
+    <Compile Include="Handler\IDockerHandler.cs" />
+    <Compile Include="Handler\IDockerListHandler.cs" />
+    <Compile Include="Handler\PreviousCommandHandler.cs" />
     <Compile Include="Model\DockerContainer.cs" />
     <Compile Include="Model\DockerImage.cs" />
     <Compile Include="Utils\ContainerStringParser.cs" />
     <Compile Include="Utils\StringHelper.cs" />
-    <Compile Include="ViewModels\MainViewModel.cs" />
-    <Compile Include="ViewModels\ViewModelBase.cs" />
-    <Compile Include="Wrapper\DockerWrapper.cs" />
-    <Compile Include="Wrapper\IDockerWrapper.cs" />
+    <Compile Include="ViewModel\MainViewModel.cs" />
+    <Compile Include="Foundation\NotifyPropertyChangedBase.cs" />
+    <Compile Include="Repository\DockerRepository.cs" />
+    <Compile Include="Repository\IProcessRepository.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

@@ -2,9 +2,9 @@
 using System.Diagnostics;
 using Dockutopia.Model;
 
-namespace Dockutopia.Wrapper
+namespace Dockutopia.Repository
 {
-    public class DockerWrapper : IDockerWrapper
+    public class DockerRepository : IProcessRepository
     {
         private readonly Process _process;
 
@@ -17,7 +17,7 @@ namespace Dockutopia.Wrapper
         public int ProcessId { get; private set; }
         public int ExitCode { get; private set; }
 
-        public DockerWrapper(string arguments = "")
+        public DockerRepository(string arguments = "")
         {
             var startInfo = new ProcessStartInfo()
             {
