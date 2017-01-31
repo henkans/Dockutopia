@@ -2,15 +2,17 @@
 using System.Globalization;
 using System.Windows.Data;
 
-namespace Dockutopia.Converters
+namespace Dockutopia.Converter
 {
-    public class StopCommandParamConverter : IValueConverter
+
+    public class IpCommandParamConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
+            var command = @"inspect --format {{.NetworkSettings.Networks.nat.IPAddress}} ";
             if (value is string)
             {
-                return $"stop {value}";
+                return command + value;
             }
             return value;
         }

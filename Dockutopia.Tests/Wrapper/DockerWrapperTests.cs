@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Dockutopia.Model;
-using Dockutopia.Wrapper;
+using Dockutopia.Repository;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Dockutopia.Tests.Wrapper
@@ -27,7 +27,7 @@ namespace Dockutopia.Tests.Wrapper
 
 
             //Act
-            var wrapper = new DockerWrapper(command);
+            var wrapper = new DockerRepository(command);
 
             // Run command...
             wrapper.Exited += delegate { exitString = "exit";  }; 
