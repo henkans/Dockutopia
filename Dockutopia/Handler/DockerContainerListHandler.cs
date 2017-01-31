@@ -20,6 +20,8 @@ namespace Dockutopia.Handler
         }
 
         private ObservableCollection<DockerContainer> _dockerContainers;
+        private DockerContainer _selectedDockerContainer;
+
         public ObservableCollection<DockerContainer> DockerContainers
         {
             get { return _dockerContainers; }
@@ -30,7 +32,15 @@ namespace Dockutopia.Handler
             }
         }
 
-        public DockerContainer SelectedDockerContainer { get; set; }
+        public DockerContainer SelectedDockerContainer
+        {
+            get { return _selectedDockerContainer; }
+            set
+            {
+                _selectedDockerContainer = value;
+                this.OnPropertyChanged();
+            }
+        }
 
 
         private ObservableCollection<DockerContainer> TempDockerContainers { get; set; }

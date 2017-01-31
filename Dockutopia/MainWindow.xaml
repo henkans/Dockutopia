@@ -54,7 +54,7 @@
             </ListView>
 
 
-            <ListView x:Name="listBoxContainers" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" ItemsSource="{Binding DockerContainerListHandler.DockerContainers, Mode=TwoWay}" SelectedItem="{Binding DockerContainerListHandler.SelectedDockerContainer}" Grid.ColumnSpan="2" Margin="0,140,0,0" Grid.RowSpan="2">
+            <ListView x:Name="listBoxContainers" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" ItemsSource="{Binding DockerContainerListHandler.DockerContainers}" SelectedItem="{Binding DockerContainerListHandler.SelectedDockerContainer}" Grid.ColumnSpan="2" Margin="0,140,0,0" Grid.RowSpan="2">
                 <ListView.View>
                     <GridView>
                         <GridViewColumn Header="ContainerId" DisplayMemberBinding="{Binding ContainerId}" />
@@ -66,14 +66,13 @@
                         <GridViewColumn Header="Names" DisplayMemberBinding="{Binding Names}" />
                     </GridView>
                 </ListView.View>
-                <ListView.ContextMenu >
-                    <ContextMenu Background="DimGray" MinWidth="150">
+                <ListView.ContextMenu>
+                    <ContextMenu x:Name="ContainersContextMenu" Background="DimGray" MinWidth="150">
                         <MenuItem Header="   Start" Command="{Binding RunDockerCommandWithRefreshCommand}" CommandParameter="{Binding DockerContainerListHandler.SelectedDockerContainer.Names, Converter={StaticResource startCommandParamConverter}}"/>
                         <MenuItem Header="   Stop" Command="{Binding RunDockerCommandWithRefreshCommand}" CommandParameter="{Binding DockerContainerListHandler.SelectedDockerContainer.Names, Converter={StaticResource stopCommandParamConverter}}"/>
                         <MenuItem Header="   View IP" Command="{Binding RunDockerCommandWithRefreshCommand}" CommandParameter="{Binding DockerContainerListHandler.SelectedDockerContainer.ContainerId, Converter={StaticResource ipCommandParamConverter}}"/>
-
-
                     </ContextMenu>
+                    
                 </ListView.ContextMenu>
             </ListView>
 

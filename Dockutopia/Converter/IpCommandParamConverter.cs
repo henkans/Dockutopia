@@ -9,6 +9,7 @@ namespace Dockutopia.Converter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
+            if (value==null) return null;
             var command = @"inspect --format {{.NetworkSettings.Networks.nat.IPAddress}} ";
             if (value is string)
             {
