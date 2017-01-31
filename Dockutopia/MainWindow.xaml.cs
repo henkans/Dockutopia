@@ -3,6 +3,7 @@ using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
+using Dockutopia.ViewModels;
 
 namespace Dockutopia
 {
@@ -12,10 +13,15 @@ namespace Dockutopia
         public MainWindow()
         {
             InitializeComponent();
+
             //TODO Temp font setting
             this.FontFamily = new FontFamily("Lucida Sans Typewriter");
             //this.FontSize = 8;
+
+
         }
+
+
 
         private void textBoxCommand_KeyUp(object sender, KeyEventArgs e)
         {

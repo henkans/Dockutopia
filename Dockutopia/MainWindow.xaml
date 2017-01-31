@@ -12,6 +12,7 @@
         <vm:MainViewModel />
     </Window.DataContext>
     <Window.InputBindings>
+        <KeyBinding Key="F1" Command="{Binding RunDockerCommand}" CommandParameter="help"/>
         <KeyBinding Key="F5" Command="{Binding RunDockerImagesListCommand}" />
         <KeyBinding Key="F6" Command="{Binding RunDockerContainerListCommand}" />
     </Window.InputBindings>
@@ -86,9 +87,9 @@
             <RichTextBox Grid.Row="0" x:Name="textBoxOutput" IsReadOnly="True"  HorizontalAlignment="Stretch" VerticalAlignment="Stretch"  AcceptsReturn="True" MinHeight="200" ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Visible" TextChanged="textBoxOutput_TextChanged">
                 <FlowDocument>
                     <Paragraph>
-                        <Run Text="Dockutopia [Version 0.0.14393]" />
+                        <Run Text="Dockutopia [Version 0.0.1]" Foreground="CadetBlue"/>
                         <LineBreak />
-                        <Run Text="no (c) Free as in both 'free speech' and 'free beer'." />
+                        <Run Text="no (c) Free as in both 'free speech' and 'free beer'." Foreground="CadetBlue"/>
                         <LineBreak />
                         
                         <Run Text="{Binding Path=OutputText}" />
