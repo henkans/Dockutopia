@@ -15,6 +15,8 @@ namespace Dockutopia.Handler
         {
             RunDockerContainerListCommand = new RelayCommand(RunDockerContainerList);
             _dockerContainers = new ObservableCollection<DockerContainer>();
+            TempDockerContainers = new ObservableCollection<DockerContainer>();
+            RunDockerContainerList();
         }
 
         private ObservableCollection<DockerContainer> _dockerContainers;
@@ -30,23 +32,26 @@ namespace Dockutopia.Handler
 
         public DockerContainer SelectedDockerContainer { get; set; }
 
+
+        private ObservableCollection<DockerContainer> TempDockerContainers { get; set; }
+    
+
         public ICommand RunDockerContainerListCommand { get; set; }
         private void RunDockerContainerList()
         {
-            DockerContainers.Clear();
-
+           
             try
             {
                 // Run command...
                 DockerRepository dockerWrapper = new DockerRepository(DockerContainer.Format);
-                //dockerWrapper.Exited += DockerWrapper_Exited;
+                dockerWrapper.Exited += DockerContainerList_Exited;
                 dockerWrapper.OutputDataReceived += DockerContainerList_DataReceived;
                 dockerWrapper.ErrorDataReceived += DockerContainerList_DataReceived;
                 dockerWrapper.BeginRun();
             }
             catch (Exception exception)
             {
-                // OutputText = exception.ToString();
+                throw new Exception("Error running RunDockerContainerList().", exception);
             }
         }
         void DockerContainerList_DataReceived(object sender, DataEventArgs e)
@@ -57,8 +62,20 @@ namespace Dockutopia.Handler
                 if (e.Data != null && e.Data.Trim() != string.Empty)
                 {
                     var result = ContainerStringParser.ParseDockerContainerString(e.Data);
-                    DockerContainers.Add(result);
+                    TempDockerContainers.Add(result);
                 }
+
+            }));
+
+        }
+
+        void DockerContainerList_Exited(object sender, EventArgs e)
+        {
+
+            Application.Current.Dispatcher.Invoke((Action)(() =>
+            {
+                DockerContainers = new ObservableCollection<DockerContainer>(TempDockerContainers);
+                TempDockerContainers.Clear();
 
             }));
 

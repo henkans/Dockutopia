@@ -17,7 +17,15 @@ namespace Dockutopia.ViewModel
             //To run multiple commands...
             OnEnterPressCommand = new RelayCommand<string>(OnEnterPress);
             RefreshUiCommand = new RelayCommand(RefreshUi);
-            
+            RunDockerCommandWithRefreshCommand = new RelayCommand<string>(RunDockerCommandWithRefresh);
+
+
+            //set initial
+            //RefreshUiCommand.Execute(null);
+            //RefreshUi();
+            //DockerImagesListHandler.RunDockerImagesListCommand.Execute(null);
+            //DockerContainerListHandler.RunDockerContainerListCommand.Execute(null);
+
         }
 
         public DockerHandler DockerHandler { get; set; }
@@ -32,6 +40,16 @@ namespace Dockutopia.ViewModel
             DockerHandler.RunDockerCommand.Execute(command);
             PreviousCommandHandler.AddInputCommand.Execute(command);
         }
+
+
+        public ICommand RunDockerCommandWithRefreshCommand { get; set; }
+        private void RunDockerCommandWithRefresh(object command)
+        {
+            //To run multiple commands
+            DockerHandler.RunDockerCommand.Execute(command);
+            RefreshUiCommand.Execute(command);
+        }
+
 
         public ICommand RefreshUiCommand { get; set; }
         private void RefreshUi()

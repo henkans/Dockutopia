@@ -20,6 +20,10 @@
         <converter:IpCommandParamConverter x:Key="ipCommandParamConverter" />
     </Window.Resources>
     <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="137*"/>
+            <ColumnDefinition Width="22*"/>
+        </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
             <RowDefinition Height="10" />
@@ -27,13 +31,17 @@
         </Grid.RowDefinitions>
 
         <!-- top grid -->
-        <Grid Grid.Row="0">
+        <Grid Grid.Row="0" Grid.ColumnSpan="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="452*"/>
+                <ColumnDefinition Width="343*"/>
+            </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
                 <RowDefinition Height="*" />
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
 
-            <ListView Grid.Row="0" x:Name="listBoxImages" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" ItemsSource="{Binding DockerImagesListHandler.DockerImages}">
+            <ListView Grid.Row="0" x:Name="listBoxImages" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" ItemsSource="{Binding DockerImagesListHandler.DockerImages}" Grid.ColumnSpan="2" Margin="0,0,0,0.5">
                 <ListView.View>
                     <GridView>
                         <GridViewColumn Header="Repository" DisplayMemberBinding="{Binding Repository}" />
@@ -46,7 +54,7 @@
             </ListView>
 
 
-            <ListView Grid.Row="1" x:Name="listBoxContainers" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" ItemsSource="{Binding DockerContainerListHandler.DockerContainers}" SelectedItem="{Binding DockerContainerListHandler.SelectedDockerContainer}">
+            <ListView x:Name="listBoxContainers" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" ItemsSource="{Binding DockerContainerListHandler.DockerContainers, Mode=TwoWay}" SelectedItem="{Binding DockerContainerListHandler.SelectedDockerContainer}" Grid.ColumnSpan="2" Margin="0,140,0,0" Grid.RowSpan="2">
                 <ListView.View>
                     <GridView>
                         <GridViewColumn Header="ContainerId" DisplayMemberBinding="{Binding ContainerId}" />
@@ -60,9 +68,9 @@
                 </ListView.View>
                 <ListView.ContextMenu >
                     <ContextMenu Background="DimGray" MinWidth="150">
-                        <MenuItem Header="   Start" Command="{Binding DockerHandler.RunDockerCommand}" CommandParameter="{Binding DockerContainerListHandler.SelectedDockerContainer.Names, Converter={StaticResource startCommandParamConverter}}"/>
-                        <MenuItem Header="   Stop" Command="{Binding DockerHandler.RunDockerCommand}" CommandParameter="{Binding DockerContainerListHandler.SelectedDockerContainer.Names, Converter={StaticResource stopCommandParamConverter}}"/>
-                        <MenuItem Header="   View IP" Command="{Binding DockerHandler.RunDockerCommand}" CommandParameter="{Binding DockerContainerListHandler.SelectedDockerContainer.ContainerId, Converter={StaticResource ipCommandParamConverter}}"/>
+                        <MenuItem Header="   Start" Command="{Binding RunDockerCommandWithRefreshCommand}" CommandParameter="{Binding DockerContainerListHandler.SelectedDockerContainer.Names, Converter={StaticResource startCommandParamConverter}}"/>
+                        <MenuItem Header="   Stop" Command="{Binding RunDockerCommandWithRefreshCommand}" CommandParameter="{Binding DockerContainerListHandler.SelectedDockerContainer.Names, Converter={StaticResource stopCommandParamConverter}}"/>
+                        <MenuItem Header="   View IP" Command="{Binding RunDockerCommandWithRefreshCommand}" CommandParameter="{Binding DockerContainerListHandler.SelectedDockerContainer.ContainerId, Converter={StaticResource ipCommandParamConverter}}"/>
 
 
                     </ContextMenu>
@@ -70,13 +78,13 @@
             </ListView>
 
         </Grid>
-        
+
 
         <!-- grid splitter -->
-        <GridSplitter Grid.Row="1" Height="10" HorizontalAlignment="Stretch" Background="DimGray"/>
+        <GridSplitter Grid.Row="1" Height="10" HorizontalAlignment="Stretch" Background="DimGray" Grid.ColumnSpan="2"/>
 
         <!-- bottom grid -->
-        <Grid Grid.Row="2">
+        <Grid Grid.Row="2" Grid.ColumnSpan="2" Margin="0,0,0,0.5">
             <Grid.RowDefinitions>
                 <RowDefinition Height="*" />
                 <RowDefinition Height="Auto" />
@@ -89,10 +97,10 @@
                         <LineBreak />
                         <Run Text="no (c) Free as in both 'free speech' and 'free beer'." Foreground="CadetBlue"/>
                         <LineBreak />
-                        
+
                         <Run Text="{Binding Path=DockerHandler.OutputText}" />
                     </Paragraph>
-                    </FlowDocument>
+                </FlowDocument>
             </RichTextBox>
             <TextBox Grid.Row="1" x:Name="textBoxCommand" HorizontalAlignment="Stretch" Height="23" TextWrapping="Wrap" Text="{Binding PreviousCommandHandler.CommandText}" VerticalAlignment="Top" KeyUp="textBoxCommand_KeyUp">
                 <TextBox.InputBindings>

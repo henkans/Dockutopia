@@ -15,6 +15,8 @@ namespace Dockutopia.Handler
         {
             RunDockerImagesListCommand = new RelayCommand(RunDockerImagesList);
             _dockerImages = new ObservableCollection<DockerImage>();
+            TempDockerImages = new ObservableCollection<DockerImage>();
+            RunDockerImagesList();
         }
 
 
@@ -29,24 +31,27 @@ namespace Dockutopia.Handler
                 this.OnPropertyChanged();
             }
         }
+
+        public ObservableCollection<DockerImage> TempDockerImages {get; set; }
+
+
         // -------------------- Image List
         public ICommand RunDockerImagesListCommand { get; set; }
         private void RunDockerImagesList()
         {
-            DockerImages.Clear();
-
             try
             {
+                TempDockerImages.Clear();
                 // Run command...
                 DockerRepository dockerWrapper = new DockerRepository(DockerImage.Command);
-                //dockerWrapper.Exited += DockerWrapper_Exited;
+                dockerWrapper.Exited += DockerImageList_Exited;
                 dockerWrapper.OutputDataReceived += DockerImageList_DataReceived;
                 dockerWrapper.ErrorDataReceived += DockerImageList_DataReceived;
                 dockerWrapper.BeginRun();
             }
             catch (Exception exception)
             {
-                //OutputText = exception.ToString();
+                throw new Exception("Error running RunDockerImagesList().", exception);
             }
         }
         void DockerImageList_DataReceived(object sender, DataEventArgs e)
@@ -58,11 +63,26 @@ namespace Dockutopia.Handler
                 if (e.Data != null && e.Data.Trim() != string.Empty)
                 {
                     var result = ContainerStringParser.ParseDockerImageString(e.Data);
-                    DockerImages.Add(result);
+                    TempDockerImages.Add(result);
                 }
 
             }));
         }
+
+        void DockerImageList_Exited(object sender, EventArgs e)
+        {
+
+            Application.Current.Dispatcher.Invoke((Action)(() =>
+            {
+                DockerImages = new ObservableCollection<DockerImage>(TempDockerImages);
+                //TempDockerImages.Clear();
+
+            }));
+
+        }
+
+        
+
 
     }
 }

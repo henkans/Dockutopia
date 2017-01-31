@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Threading;
 using Dockutopia.Model;
 
 namespace Dockutopia.Repository
@@ -54,7 +55,10 @@ namespace Dockutopia.Repository
 
                     _process.BeginOutputReadLine();
                     _process.BeginErrorReadLine();
+
+                    
                 }
+               
             }
         }
 
@@ -85,6 +89,7 @@ namespace Dockutopia.Repository
             HasExited = true;
             IsRunning = false;
             ExitCode = _process.ExitCode;
+            _process.WaitForExit();
             Exited(this, e);
         }
     }
