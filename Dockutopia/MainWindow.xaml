@@ -7,31 +7,61 @@
         xmlns:viewModel="clr-namespace:Dockutopia.ViewModel"
         xmlns:converter="clr-namespace:Dockutopia.Converter"
         mc:Ignorable="d"
-        Title="Dockutopia" Height="600" Width="800" Loaded="Window_Loaded" ResizeMode="CanResizeWithGrip">
+        Title="Dockutopia" Height="600" Width="800" Loaded="Window_Loaded" ResizeMode="CanResizeWithGrip" Icon="Dockutopia.ico">
     <Window.DataContext>
         <viewModel:MainNotifyPropertyChanged />
     </Window.DataContext>
     <Window.InputBindings>
+        <KeyBinding Key="F1" Command="{Binding RunDockerCommandWithRefreshCommand}" CommandParameter="help" />
         <KeyBinding Key="F5" Command="{Binding RefreshUiCommand}" />
     </Window.InputBindings>
     <Window.Resources>
         <converter:StartCommandParamConverter x:Key="startCommandParamConverter" />
         <converter:StopCommandParamConverter x:Key="stopCommandParamConverter" />
         <converter:IpCommandParamConverter x:Key="ipCommandParamConverter" />
+        <converter:InspectCommandParamConverter x:Key="inspectCommandParamConverter" />
+        
     </Window.Resources>
     <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="137*"/>
-            <ColumnDefinition Width="22*"/>
-        </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
             <RowDefinition Height="10" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
+        <!-- Menu grid -->
+
+        <Menu Grid.Row="0">
+            <MenuItem Header="_File">
+                <MenuItem Header="_Close">
+                    <MenuItem.Icon>
+                        <TextBlock Text="&#xf00d;" FontFamily="{StaticResource FontAwesome}"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+            </MenuItem>
+            <MenuItem Header="_Commands">
+                <MenuItem Header="_info" Command="{Binding RunDockerCommandWithRefreshCommand}" CommandParameter="info">
+                    <MenuItem.Icon>
+                        <TextBlock Text="&#xf129;" FontFamily="{StaticResource FontAwesome}"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Header="_version" Command="{Binding RunDockerCommandWithRefreshCommand}" CommandParameter="version">
+                    <MenuItem.Icon>
+                        <TextBlock Text="&#xf24d;" FontFamily="{StaticResource FontAwesome}"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Header="_help" Command="{Binding RunDockerCommandWithRefreshCommand}" CommandParameter="help">
+                    <MenuItem.Icon>
+                        <TextBlock Text="&#xf128;" FontFamily="{StaticResource FontAwesome}"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+            </MenuItem>
+
+        </Menu>
+
 
         <!-- top grid -->
-        <Grid Grid.Row="0" Grid.ColumnSpan="2">
+        <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="452*"/>
                 <ColumnDefinition Width="343*"/>
@@ -67,10 +97,12 @@
                     </GridView>
                 </ListView.View>
                 <ListView.ContextMenu>
-                    <ContextMenu x:Name="ContainersContextMenu" Background="DimGray" MinWidth="150">
-                        <MenuItem Header="   Start" Command="{Binding RunDockerCommandWithRefreshCommand}" CommandParameter="{Binding DockerContainerListHandler.SelectedDockerContainer.Names, Converter={StaticResource startCommandParamConverter}}"/>
-                        <MenuItem Header="   Stop" Command="{Binding RunDockerCommandWithRefreshCommand}" CommandParameter="{Binding DockerContainerListHandler.SelectedDockerContainer.Names, Converter={StaticResource stopCommandParamConverter}}"/>
-                        <MenuItem Header="   View IP" Command="{Binding RunDockerCommandWithRefreshCommand}" CommandParameter="{Binding DockerContainerListHandler.SelectedDockerContainer.ContainerId, Converter={StaticResource ipCommandParamConverter}}"/>
+                    <ContextMenu x:Name="ContainersContextMenu" Background="DimGray" MinWidth="100">
+                        <MenuItem Header="Start" Command="{Binding RunDockerCommandWithRefreshCommand}" CommandParameter="{Binding DockerContainerListHandler.SelectedDockerContainer.Names, Converter={StaticResource startCommandParamConverter}}"/>
+                        <MenuItem Header="Stop" Command="{Binding RunDockerCommandWithRefreshCommand}" CommandParameter="{Binding DockerContainerListHandler.SelectedDockerContainer.Names, Converter={StaticResource stopCommandParamConverter}}"/>
+                        <MenuItem Header="View IP" Command="{Binding RunDockerCommandWithRefreshCommand}" CommandParameter="{Binding DockerContainerListHandler.SelectedDockerContainer.ContainerId, Converter={StaticResource ipCommandParamConverter}}"/>
+                        <MenuItem Header="Inspect all" Command="{Binding RunDockerCommandWithRefreshCommand}" CommandParameter="{Binding DockerContainerListHandler.SelectedDockerContainer.ContainerId, Converter={StaticResource inspectCommandParamConverter}}"/>
+
                     </ContextMenu>
                     
                 </ListView.ContextMenu>
@@ -80,10 +112,10 @@
 
 
         <!-- grid splitter -->
-        <GridSplitter Grid.Row="1" Height="10" HorizontalAlignment="Stretch" Background="DimGray" Grid.ColumnSpan="2"/>
+        <GridSplitter Grid.Row="2" Height="10" HorizontalAlignment="Stretch" Background="DimGray"/>
 
         <!-- bottom grid -->
-        <Grid Grid.Row="2" Grid.ColumnSpan="2" Margin="0,0,0,0.5">
+        <Grid Grid.Row="3" Margin="0,0,0,0.5">
             <Grid.RowDefinitions>
                 <RowDefinition Height="*" />
                 <RowDefinition Height="Auto" />
@@ -95,8 +127,8 @@
                         <Run Text="Dockutopia [Version 0.0.1]" Foreground="CadetBlue"/>
                         <LineBreak />
                         <Run Text="no (c) Free as in both 'free speech' and 'free beer'." Foreground="CadetBlue"/>
+                        <Run Text="&#xf259;" FontFamily="{StaticResource FontAwesome}" Foreground="WhiteSmoke"/>
                         <LineBreak />
-
                         <Run Text="{Binding Path=DockerHandler.OutputText}" />
                     </Paragraph>
                 </FlowDocument>

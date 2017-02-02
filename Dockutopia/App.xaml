@@ -4,6 +4,6 @@
              xmlns:local="clr-namespace:Dockutopia"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
-        <ResourceDictionary Source="Utils/ExpressionDark.xaml" />
+       <ResourceDictionary Source="Utils/ExpressionDark.xaml" />
     </Application.Resources>
 </Application>
