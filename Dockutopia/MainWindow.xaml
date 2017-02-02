@@ -7,7 +7,7 @@
         xmlns:viewModel="clr-namespace:Dockutopia.ViewModel"
         xmlns:converter="clr-namespace:Dockutopia.Converter"
         mc:Ignorable="d"
-        Title="Dockutopia" Height="600" Width="800" Loaded="Window_Loaded" ResizeMode="CanResizeWithGrip" Icon="Dockutopia.ico">
+        Title="Dockutopia" Width="800" Loaded="Window_Loaded" ResizeMode="CanResizeWithGrip" Icon="Dockutopia.ico">
     <Window.DataContext>
         <viewModel:MainNotifyPropertyChanged />
     </Window.DataContext>
@@ -24,8 +24,8 @@
     </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
+            <RowDefinition Height="30" />
             <RowDefinition Height="Auto" />
-            <RowDefinition Height="*" />
             <RowDefinition Height="10" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
@@ -33,24 +33,24 @@
 
         <Menu Grid.Row="0">
             <MenuItem Header="_File">
-                <MenuItem Header="_Close">
+                <MenuItem Header="_Close" MinWidth="100">
                     <MenuItem.Icon>
                         <TextBlock Text="&#xf00d;" FontFamily="{StaticResource FontAwesome}"/>
                     </MenuItem.Icon>
                 </MenuItem>
             </MenuItem>
             <MenuItem Header="_Commands">
-                <MenuItem Header="_info" Command="{Binding RunDockerCommandWithRefreshCommand}" CommandParameter="info">
+                <MenuItem Header="_info" Command="{Binding RunDockerCommandWithRefreshCommand}" CommandParameter="info" MinWidth="100">
                     <MenuItem.Icon>
                         <TextBlock Text="&#xf129;" FontFamily="{StaticResource FontAwesome}"/>
                     </MenuItem.Icon>
                 </MenuItem>
-                <MenuItem Header="_version" Command="{Binding RunDockerCommandWithRefreshCommand}" CommandParameter="version">
+                <MenuItem Header="_version" Command="{Binding RunDockerCommandWithRefreshCommand}" CommandParameter="version" MinWidth="100">
                     <MenuItem.Icon>
                         <TextBlock Text="&#xf24d;" FontFamily="{StaticResource FontAwesome}"/>
                     </MenuItem.Icon>
                 </MenuItem>
-                <MenuItem Header="_help" Command="{Binding RunDockerCommandWithRefreshCommand}" CommandParameter="help">
+                <MenuItem Header="_help" Command="{Binding RunDockerCommandWithRefreshCommand}" CommandParameter="help" MinWidth="100">
                     <MenuItem.Icon>
                         <TextBlock Text="&#xf128;" FontFamily="{StaticResource FontAwesome}"/>
                     </MenuItem.Icon>
@@ -61,17 +61,11 @@
 
 
         <!-- top grid -->
-        <Grid Grid.Row="1">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="452*"/>
-                <ColumnDefinition Width="343*"/>
-            </Grid.ColumnDefinitions>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="*" />
-                <RowDefinition Height="*" />
-            </Grid.RowDefinitions>
 
-            <ListView Grid.Row="0" x:Name="listBoxImages" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" ItemsSource="{Binding DockerImagesListHandler.DockerImages}" Grid.ColumnSpan="2" Margin="0,0,0,0.5">
+
+        <StackPanel Grid.Row="1">
+
+                <ListView x:Name="listBoxImages" HorizontalAlignment="Stretch"  ItemsSource="{Binding DockerImagesListHandler.DockerImages}" Margin="0,0,0,0">
                 <ListView.View>
                     <GridView>
                         <GridViewColumn Header="Repository" DisplayMemberBinding="{Binding Repository}" />
@@ -84,7 +78,7 @@
             </ListView>
 
 
-            <ListView x:Name="listBoxContainers" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" ItemsSource="{Binding DockerContainerListHandler.DockerContainers}" SelectedItem="{Binding DockerContainerListHandler.SelectedDockerContainer}" Grid.ColumnSpan="2" Margin="0,140,0,0" Grid.RowSpan="2">
+            <ListView x:Name="listBoxContainers" HorizontalAlignment="Stretch"  ItemsSource="{Binding DockerContainerListHandler.DockerContainers}" SelectedItem="{Binding DockerContainerListHandler.SelectedDockerContainer}" Margin="0,0,0,0">
                 <ListView.View>
                     <GridView>
                         <GridViewColumn Header="ContainerId" DisplayMemberBinding="{Binding ContainerId}" />
@@ -97,9 +91,10 @@
                     </GridView>
                 </ListView.View>
                 <ListView.ContextMenu>
-                    <ContextMenu x:Name="ContainersContextMenu" Background="DimGray" MinWidth="100">
+                    <ContextMenu x:Name="ContainersContextMenu" MinWidth="100">
                         <MenuItem Header="Start" Command="{Binding RunDockerCommandWithRefreshCommand}" CommandParameter="{Binding DockerContainerListHandler.SelectedDockerContainer.Names, Converter={StaticResource startCommandParamConverter}}"/>
                         <MenuItem Header="Stop" Command="{Binding RunDockerCommandWithRefreshCommand}" CommandParameter="{Binding DockerContainerListHandler.SelectedDockerContainer.Names, Converter={StaticResource stopCommandParamConverter}}"/>
+                        <Separator />
                         <MenuItem Header="View IP" Command="{Binding RunDockerCommandWithRefreshCommand}" CommandParameter="{Binding DockerContainerListHandler.SelectedDockerContainer.ContainerId, Converter={StaticResource ipCommandParamConverter}}"/>
                         <MenuItem Header="Inspect all" Command="{Binding RunDockerCommandWithRefreshCommand}" CommandParameter="{Binding DockerContainerListHandler.SelectedDockerContainer.ContainerId, Converter={StaticResource inspectCommandParamConverter}}"/>
 
@@ -108,26 +103,26 @@
                 </ListView.ContextMenu>
             </ListView>
 
-        </Grid>
+                </StackPanel>
 
 
-        <!-- grid splitter -->
+                <!-- grid splitter -->
         <GridSplitter Grid.Row="2" Height="10" HorizontalAlignment="Stretch" Background="DimGray"/>
 
         <!-- bottom grid -->
-        <Grid Grid.Row="3" Margin="0,0,0,0.5">
+        <Grid Grid.Row="3" Margin="0,0,0,0">
             <Grid.RowDefinitions>
                 <RowDefinition Height="*" />
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
 
-            <RichTextBox Grid.Row="0" x:Name="textBoxOutput" IsReadOnly="True"  HorizontalAlignment="Stretch" VerticalAlignment="Stretch"  AcceptsReturn="True" MinHeight="200" ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Visible" TextChanged="textBoxOutput_TextChanged">
+            <RichTextBox Grid.Row="0" x:Name="textBoxOutput" IsReadOnly="True"  HorizontalAlignment="Stretch" VerticalAlignment="Stretch"  AcceptsReturn="True" MinHeight="200" Height="Auto" ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Visible" TextChanged="textBoxOutput_TextChanged">
                 <FlowDocument>
                     <Paragraph>
-                        <Run Text="Dockutopia [Version 0.0.1]" Foreground="CadetBlue"/>
+                        <Run Text="Dockutopia " Foreground="CadetBlue"/><Run Text="{Binding Version, Mode=OneWay}" Foreground="CadetBlue"/>
                         <LineBreak />
                         <Run Text="no (c) Free as in both 'free speech' and 'free beer'." Foreground="CadetBlue"/>
-                        <Run Text="&#xf259;" FontFamily="{StaticResource FontAwesome}" Foreground="WhiteSmoke"/>
+                        <Run Text="&#xf259;" FontFamily="{StaticResource FontAwesome}" Foreground="CadetBlue"/>
                         <LineBreak />
                         <Run Text="{Binding Path=DockerHandler.OutputText}" />
                     </Paragraph>
@@ -145,4 +140,5 @@
 
 
     </Grid>
+
 </Window>

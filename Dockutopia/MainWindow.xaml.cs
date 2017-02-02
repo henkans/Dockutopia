@@ -16,7 +16,7 @@ namespace Dockutopia
             //TODO Temp font setting
             this.FontFamily = new FontFamily("Lucida Sans Typewriter");
             //this.FontSize = 8;
-
+            this.SizeToContent = SizeToContent.Height;
 
         }
 

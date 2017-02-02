@@ -34,7 +34,7 @@ namespace Dockutopia.ViewModel
         public DockerImageListHandler DockerImagesListHandler { get; set; }
         public PreviousCommandHandler PreviousCommandHandler { get; set; }
 
-        public string Version => "Version " + Assembly.GetEntryAssembly().GetName().Version.ToString();
+        public string Version => "[Version " + Assembly.GetEntryAssembly().GetName().Version.ToString() + "]";
 
         public ICommand OnEnterPressCommand { get; set; }
         private void OnEnterPress(object command)
