@@ -65,7 +65,7 @@
 
         <StackPanel Grid.Row="1">
 
-                <ListView x:Name="listBoxImages" HorizontalAlignment="Stretch"  ItemsSource="{Binding DockerImagesListHandler.DockerImages}" Margin="0,0,0,0">
+                <ListView x:Name="listBoxImages" HorizontalAlignment="Stretch"  ItemsSource="{Binding DockerImagesListHandler.DockerEntities}" Margin="0,0,0,0">
                 <ListView.View>
                     <GridView>
                         <GridViewColumn Header="Repository" DisplayMemberBinding="{Binding Repository}" />
@@ -78,7 +78,7 @@
             </ListView>
 
 
-            <ListView x:Name="listBoxContainers" HorizontalAlignment="Stretch"  ItemsSource="{Binding DockerContainerListHandler.DockerContainers}" SelectedItem="{Binding DockerContainerListHandler.SelectedDockerContainer}" Margin="0,0,0,0">
+            <ListView x:Name="listBoxContainers" HorizontalAlignment="Stretch"  ItemsSource="{Binding DockerContainerListHandler.DockerEntities}" SelectedItem="{Binding DockerContainerListHandler.SelectedDockerEntity}" Margin="0,0,0,0">
                 <ListView.View>
                     <GridView>
                         <GridViewColumn Header="ContainerId" DisplayMemberBinding="{Binding ContainerId}" />
@@ -92,11 +92,11 @@
                 </ListView.View>
                 <ListView.ContextMenu>
                     <ContextMenu x:Name="ContainersContextMenu" MinWidth="100">
-                        <MenuItem Header="Start" Command="{Binding RunDockerCommandWithRefreshCommand}" CommandParameter="{Binding DockerContainerListHandler.SelectedDockerContainer.Names, Converter={StaticResource startCommandParamConverter}}"/>
-                        <MenuItem Header="Stop" Command="{Binding RunDockerCommandWithRefreshCommand}" CommandParameter="{Binding DockerContainerListHandler.SelectedDockerContainer.Names, Converter={StaticResource stopCommandParamConverter}}"/>
+                        <MenuItem Header="Start" Command="{Binding RunDockerCommandWithRefreshCommand}" CommandParameter="{Binding DockerContainerListHandler.SelectedDockerEntity.Names, Converter={StaticResource startCommandParamConverter}}"/>
+                        <MenuItem Header="Stop" Command="{Binding RunDockerCommandWithRefreshCommand}" CommandParameter="{Binding DockerContainerListHandler.SelectedDockerEntity.Names, Converter={StaticResource stopCommandParamConverter}}"/>
                         <Separator />
-                        <MenuItem Header="View IP" Command="{Binding RunDockerCommandWithRefreshCommand}" CommandParameter="{Binding DockerContainerListHandler.SelectedDockerContainer.ContainerId, Converter={StaticResource ipCommandParamConverter}}"/>
-                        <MenuItem Header="Inspect all" Command="{Binding RunDockerCommandWithRefreshCommand}" CommandParameter="{Binding DockerContainerListHandler.SelectedDockerContainer.ContainerId, Converter={StaticResource inspectCommandParamConverter}}"/>
+                        <MenuItem Header="View IP" Command="{Binding RunDockerCommandWithRefreshCommand}" CommandParameter="{Binding DockerContainerListHandler.SelectedDockerEntity.ContainerId, Converter={StaticResource ipCommandParamConverter}}"/>
+                        <MenuItem Header="Inspect all" Command="{Binding RunDockerCommandWithRefreshCommand}" CommandParameter="{Binding DockerContainerListHandler.SelectedDockerEntity.ContainerId, Converter={StaticResource inspectCommandParamConverter}}"/>
 
                     </ContextMenu>
                     

@@ -2,7 +2,7 @@
 {
     public class DockerImage
     {
-        public static string Command => @"images --format {{.Repository}}\t{{.Tag}}\t{{.ID}}\t{{.Size}}\t{{.CreatedSince}}";
+        public static string DockerCommand => @"images --format {{.Repository}}\t{{.Tag}}\t{{.ID}}\t{{.Size}}\t{{.CreatedSince}}";
 
         // ALL - https://github.com/Shopify/docker/tree/master/docs/reference/commandline
         // .ID Image ID
@@ -21,6 +21,16 @@
             Size = input[3];
             Created = input[4] + " ago";
         }
+
+        public DockerImage(params object[] input)
+        {
+            Repository = (string)input[0];
+            Tag = (string)input[1];
+            ImageId = (string)input[2];
+            Size = (string)input[3];
+            Created = (string)input[4] + " ago";
+        }
+
 
         public string Repository { get; set; }
         public string Tag { get; set; }

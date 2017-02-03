@@ -63,14 +63,11 @@
     <Compile Include="Converter\StartCommandParamConverter.cs" />
     <Compile Include="Converter\StopCommandParamConverter.cs" />
     <Compile Include="Handler\DockerHandler.cs" />
-    <Compile Include="Handler\DockerContainerListHandler.cs" />
-    <Compile Include="Handler\DockerImageListHandler.cs" />
-    <Compile Include="Handler\IDockerHandler.cs" />
-    <Compile Include="Handler\IDockerListHandler.cs" />
+    <Compile Include="Handler\DockerListHandler.cs" />
     <Compile Include="Handler\PreviousCommandHandler.cs" />
     <Compile Include="Model\DockerContainer.cs" />
     <Compile Include="Model\DockerImage.cs" />
-    <Compile Include="Utils\ContainerStringParser.cs" />
+    <Compile Include="Utils\DockerEntityStringParser.cs" />
     <Compile Include="Utils\StringHelper.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
     <Compile Include="Foundation\NotifyPropertyChangedBase.cs" />

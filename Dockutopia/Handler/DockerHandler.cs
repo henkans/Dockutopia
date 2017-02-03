@@ -8,7 +8,7 @@ using Dockutopia.Utils;
 namespace Dockutopia.Handler
 {
 
-    public class DockerHandler : NotifyPropertyChangedBase, IDockerHandler
+    public class DockerHandler : NotifyPropertyChangedBase
     {
         private string _outputText;
 

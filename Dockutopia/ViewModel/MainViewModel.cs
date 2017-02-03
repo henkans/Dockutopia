@@ -2,6 +2,7 @@
 using System.Windows.Input;
 using Dockutopia.Foundation;
 using Dockutopia.Handler;
+using Dockutopia.Model;
 
 namespace Dockutopia.ViewModel
 {
@@ -11,8 +12,8 @@ namespace Dockutopia.ViewModel
         public MainNotifyPropertyChanged()
         {
             DockerHandler = new DockerHandler();
-            DockerContainerListHandler = new DockerContainerListHandler();
-            DockerImagesListHandler = new DockerImageListHandler(); //Temp. make generic with DockerListHandler
+            DockerContainerListHandler = new DockerListHandler<DockerContainer>();
+            DockerImagesListHandler = new DockerListHandler<DockerImage>(); //Temp. make generic with DockerListHandler
             PreviousCommandHandler = new PreviousCommandHandler();
 
             //To run multiple commands...
@@ -21,17 +22,11 @@ namespace Dockutopia.ViewModel
             RunDockerCommandWithRefreshCommand = new RelayCommand<string>(RunDockerCommandWithRefresh);
 
 
-            //set initial
-            //RefreshUiCommand.Execute(null);
-            //RefreshUi();
-            //DockerImagesListHandler.RunDockerImagesListCommand.Execute(null);
-            //DockerContainerListHandler.RunDockerContainerListCommand.Execute(null);
-
         }
 
         public DockerHandler DockerHandler { get; set; }
-        public DockerContainerListHandler DockerContainerListHandler { get; set; }
-        public DockerImageListHandler DockerImagesListHandler { get; set; }
+        public DockerListHandler<DockerContainer> DockerContainerListHandler { get; set; }
+        public DockerListHandler<DockerImage> DockerImagesListHandler { get; set; }
         public PreviousCommandHandler PreviousCommandHandler { get; set; }
 
         public string Version => "[Version " + Assembly.GetEntryAssembly().GetName().Version.ToString() + "]";
@@ -57,8 +52,8 @@ namespace Dockutopia.ViewModel
         public ICommand RefreshUiCommand { get; set; }
         private void RefreshUi()
         {
-            DockerImagesListHandler.RunDockerImagesListCommand.Execute(null);
-            DockerContainerListHandler.RunDockerContainerListCommand.Execute(null);
+            DockerImagesListHandler.RunDockerListCommand.Execute(null);
+            DockerContainerListHandler.RunDockerListCommand.Execute(null);
         }
 
     }
