@@ -39,6 +39,7 @@ namespace Dockutopia
             if (e.Action == NotifyCollectionChangedAction.Add)
             {
                 scrollViewerOutput.ScrollToEnd();
+                textBoxCommand.Focus();
             }
         }
 

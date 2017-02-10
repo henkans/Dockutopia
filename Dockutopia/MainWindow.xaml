@@ -108,6 +108,11 @@
                         <TextBlock Text="&#xf128;" FontFamily="{StaticResource FontAwesome}"/>
                     </MenuItem.Icon>
                 </MenuItem>
+                <MenuItem Header="_stats" Command="{Binding RunDockerCommandWithRefreshCommand}" CommandParameter="stats" MinWidth="100">
+                    <MenuItem.Icon>
+                        <TextBlock Text="&#xf080;" FontFamily="{StaticResource FontAwesome}"/>
+                    </MenuItem.Icon>
+                </MenuItem>
             </MenuItem>
 
         </Menu>
@@ -156,9 +161,10 @@
                         <MenuItem Header="Start" Command="{Binding RunDockerCommandWithRefreshCommand}" CommandParameter="{Binding DockerContainerListHandler.SelectedDockerEntity.Name, Converter={StaticResource startCommandParamConverter}}"/>
                         <MenuItem Header="Stop" Command="{Binding RunDockerCommandWithRefreshCommand}" CommandParameter="{Binding DockerContainerListHandler.SelectedDockerEntity.Name, Converter={StaticResource stopCommandParamConverter}}"/>
                         <Separator />
+                        <MenuItem Header="Inspect">
                         <MenuItem Header="View IP" Command="{Binding RunDockerCommandWithRefreshCommand}" CommandParameter="{Binding DockerContainerListHandler.SelectedDockerEntity.ID, Converter={StaticResource ipCommandParamConverter}}"/>
                         <MenuItem Header="Inspect all" Command="{Binding RunDockerCommandWithRefreshCommand}" CommandParameter="{Binding DockerContainerListHandler.SelectedDockerEntity.ID, Converter={StaticResource inspectCommandParamConverter}}"/>
-
+                        </MenuItem>
                     </ContextMenu>
                     
                 </ListView.ContextMenu>
