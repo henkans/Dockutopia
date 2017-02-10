@@ -7,21 +7,38 @@
         xmlns:viewModel="clr-namespace:Dockutopia.ViewModel"
         xmlns:converter="clr-namespace:Dockutopia.Converter"
         mc:Ignorable="d"
-        Title="Dockutopia" Width="800" Loaded="Window_Loaded" ResizeMode="CanResizeWithGrip" Icon="Dockutopia.ico">
+        Title="Dockutopia" Width="900" Height="700" Loaded="Window_Loaded" ResizeMode="CanResizeWithGrip" Icon="Dockutopia.ico">
     <Window.DataContext>
         <viewModel:MainNotifyPropertyChanged />
     </Window.DataContext>
     <Window.InputBindings>
         <KeyBinding Key="F1" Command="{Binding RunDockerCommandWithRefreshCommand}" CommandParameter="help" />
         <KeyBinding Key="F5" Command="{Binding RefreshUiCommand}" />
+        <KeyBinding Key="Escape" Command="{Binding RunDockerKillCommand}" />
+        <KeyBinding Modifiers="Control" Key="c" Command="{Binding RunDockerKillCommand}" />
+        <!--<KeyBinding Key="Escape"></KeyBinding>-->
     </Window.InputBindings>
     <Window.Resources>
         <converter:StartCommandParamConverter x:Key="startCommandParamConverter" />
         <converter:StopCommandParamConverter x:Key="stopCommandParamConverter" />
         <converter:IpCommandParamConverter x:Key="ipCommandParamConverter" />
         <converter:InspectCommandParamConverter x:Key="inspectCommandParamConverter" />
-        
+        <converter:StringToBoolConverter x:Key="stringToBoolConverter" />
+        <converter:IsEnabledToHiddenConverter x:Key="isEnabledToHiddenConverter" />
+        <Storyboard x:Key="StoryboardSpinner" RepeatBehavior="Forever">
+            <DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="RectangleSpinner" Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[2].(RotateTransform.Angle)">
+                <SplineDoubleKeyFrame KeyTime="00:00:03" Value="360"/>
+            </DoubleAnimationUsingKeyFrames>
+            <DoubleAnimation Storyboard.TargetProperty="Opacity" From="0" To="1" Duration="0:0:1"  AutoReverse="True" Storyboard.TargetName="OverLay"/>
+        </Storyboard>       
     </Window.Resources>
+    <Window.Triggers>
+        <EventTrigger RoutedEvent="FrameworkElement.Loaded">
+            <BeginStoryboard Storyboard="{StaticResource StoryboardSpinner}"/>
+        </EventTrigger>
+    </Window.Triggers>
+
+
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="30" />
@@ -29,6 +46,42 @@
             <RowDefinition Height="10" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
+
+
+
+        <Popup x:Name="ImageRunPopup"  PlacementTarget="{Binding ElementName=listBoxImages}" Placement="Center" Width="300" Margin="0,20,0,0" IsOpen="{Binding RunImageIdPopUp, Converter={StaticResource stringToBoolConverter}}" StaysOpen="False">
+            <Border BorderBrush="cadetblue" BorderThickness="1" Background="#333333">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+       
+                    <TextBlock Grid.Row="0" Grid.Column="0" Foreground="WhiteSmoke" VerticalAlignment="Center" Margin="5,10,5,5" Text="Image"/>
+                    <TextBlock Grid.Row="0" Grid.Column="1" x:Name="popUpImageId" Foreground="WhiteSmoke" Margin="5,10,5,5" Text="{Binding RunImageIdPopUp}"/>
+                    <TextBlock Grid.Row="1" Grid.Column="0" Foreground="WhiteSmoke" VerticalAlignment="Center" Margin="5,0,5,0" Text="Name"/>
+                    <TextBox Grid.Row="1" Grid.Column="1" x:Name="popUpContainerName" Margin="5" Padding="2" Text="{Binding RunImageArgs.Name}"></TextBox>
+                    <TextBlock Grid.Row="2" Grid.Column="0" Foreground="WhiteSmoke" VerticalAlignment="Center" Margin="5,0,5,0" Text="IP"/>
+                    <TextBox Grid.Row="2" Grid.Column="1" x:Name="popUpIp" Margin="5" Padding="2" Text="{Binding RunImageArgs.Ip}"></TextBox>
+                    <TextBlock Grid.Row="3" Grid.Column="0" Foreground="WhiteSmoke" VerticalAlignment="Center" Margin="5,0,5,0" Text="Port out"/>
+                    <TextBox Grid.Row="3" Grid.Column="1" x:Name="popUpPortOut" Margin="5" Padding="2" Text="{Binding RunImageArgs.ContainerPort}"></TextBox>
+                    <TextBlock Grid.Row="4" Grid.Column="0" Foreground="WhiteSmoke" VerticalAlignment="Center" Margin="5,0,5,0" Text="Port in"/>
+                    <TextBox Grid.Row="4" Grid.Column="1" x:Name="popUpPortIn" Margin="5" Padding="2" Text="{Binding RunImageArgs.HostPort}"></TextBox>
+                    <CheckBox Grid.Row="5" Grid.Column="1" x:Name="popUpIsolated" Margin="5" IsChecked="{Binding RunImageArgs.RunIsolated}">run isolated</CheckBox>
+                    <Button Grid.Row="6" Grid.Column="1" Margin="5" Command="{Binding ImageRunCommand}">Run</Button>
+                </Grid>
+            </Border>
+        </Popup>
+
         <!-- Menu grid -->
 
         <Menu Grid.Row="0">
@@ -63,11 +116,11 @@
         <!-- top grid -->
 
 
-        <StackPanel Grid.Row="1" Background="DimGray">
+        <StackPanel Grid.Row="1" Background="#333333">
+            <Label Margin="6,2,6,2" Content="Images" />
 
-            <Label Height="25" Content="Images"/>    
-            
-                <ListView x:Name="listBoxImages" HorizontalAlignment="Stretch"  ItemsSource="{Binding DockerImagesListHandler.DockerEntities}" Margin="0,0,0,0">
+
+            <ListView x:Name="listBoxImages"  ItemsSource="{Binding DockerImagesListHandler.DockerEntities}" SelectedItem="{Binding DockerImagesListHandler.SelectedDockerEntity}" Margin="0,0,0,0">
                 <ListView.View>
                     <GridView>
                         <GridViewColumn Header="Repository" DisplayMemberBinding="{Binding Repository}" />
@@ -77,10 +130,16 @@
                         <GridViewColumn Header="Created" DisplayMemberBinding="{Binding Created}" />
                     </GridView>
                 </ListView.View>
+                <ListView.ContextMenu>
+                    <ContextMenu x:Name="ImagesContextMenu" MinWidth="100">
+                        <MenuItem Header="Run..." Command="{Binding ImageRunPopupCommand}" CommandParameter="{Binding DockerImagesListHandler.SelectedDockerEntity.ID}"/>
+                    </ContextMenu>
+                </ListView.ContextMenu>
             </ListView>
 
-            <Label Margin="3,6,6,2" Content="Containers" Foreground="Gray" FontSize="20" FontWeight="Bold" VerticalAlignment="Bottom"/>
-            <ListView x:Name="listBoxContainers" HorizontalAlignment="Stretch"  ItemsSource="{Binding DockerContainerListHandler.DockerEntities}" SelectedItem="{Binding DockerContainerListHandler.SelectedDockerEntity}" Margin="0,0,0,0">
+
+            <Label Margin="6,4,6,2" Content="Containers"/>
+            <ListView x:Name="listBoxContainers" ItemsSource="{Binding DockerContainerListHandler.DockerEntities}" SelectedItem="{Binding DockerContainerListHandler.SelectedDockerEntity}" Margin="0,0,0,10">
                 <ListView.View>
                     <GridView>
                         <GridViewColumn Header="ContainerId" DisplayMemberBinding="{Binding ContainerId}" />
@@ -94,22 +153,21 @@
                 </ListView.View>
                 <ListView.ContextMenu>
                     <ContextMenu x:Name="ContainersContextMenu" MinWidth="100">
-                        <MenuItem Header="Start" Command="{Binding RunDockerCommandWithRefreshCommand}" CommandParameter="{Binding DockerContainerListHandler.SelectedDockerEntity.Names, Converter={StaticResource startCommandParamConverter}}"/>
-                        <MenuItem Header="Stop" Command="{Binding RunDockerCommandWithRefreshCommand}" CommandParameter="{Binding DockerContainerListHandler.SelectedDockerEntity.Names, Converter={StaticResource stopCommandParamConverter}}"/>
+                        <MenuItem Header="Start" Command="{Binding RunDockerCommandWithRefreshCommand}" CommandParameter="{Binding DockerContainerListHandler.SelectedDockerEntity.Name, Converter={StaticResource startCommandParamConverter}}"/>
+                        <MenuItem Header="Stop" Command="{Binding RunDockerCommandWithRefreshCommand}" CommandParameter="{Binding DockerContainerListHandler.SelectedDockerEntity.Name, Converter={StaticResource stopCommandParamConverter}}"/>
                         <Separator />
-                        <MenuItem Header="View IP" Command="{Binding RunDockerCommandWithRefreshCommand}" CommandParameter="{Binding DockerContainerListHandler.SelectedDockerEntity.ContainerId, Converter={StaticResource ipCommandParamConverter}}"/>
-                        <MenuItem Header="Inspect all" Command="{Binding RunDockerCommandWithRefreshCommand}" CommandParameter="{Binding DockerContainerListHandler.SelectedDockerEntity.ContainerId, Converter={StaticResource inspectCommandParamConverter}}"/>
+                        <MenuItem Header="View IP" Command="{Binding RunDockerCommandWithRefreshCommand}" CommandParameter="{Binding DockerContainerListHandler.SelectedDockerEntity.ID, Converter={StaticResource ipCommandParamConverter}}"/>
+                        <MenuItem Header="Inspect all" Command="{Binding RunDockerCommandWithRefreshCommand}" CommandParameter="{Binding DockerContainerListHandler.SelectedDockerEntity.ID, Converter={StaticResource inspectCommandParamConverter}}"/>
 
                     </ContextMenu>
                     
                 </ListView.ContextMenu>
             </ListView>
+        </StackPanel>
 
-                </StackPanel>
 
-
-                <!-- grid splitter -->
-        <GridSplitter Grid.Row="2" Height="10" HorizontalAlignment="Stretch" Background="DimGray"/>
+         <!-- grid splitter -->
+        <GridSplitter Grid.Row="2" Height="10" HorizontalAlignment="Stretch" Background="#FF434343"/>
 
         <!-- bottom grid -->
         <Grid Grid.Row="3" Margin="0,0,0,0">
@@ -118,18 +176,17 @@
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
 
-            <RichTextBox Grid.Row="0" x:Name="textBoxOutput" IsReadOnly="True"  HorizontalAlignment="Stretch" VerticalAlignment="Stretch"  AcceptsReturn="True" MinHeight="200" Height="Auto" ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Visible" TextChanged="textBoxOutput_TextChanged">
-                <FlowDocument>
-                    <Paragraph>
-                        <Run Text="Dockutopia " Foreground="CadetBlue"/><Run Text="{Binding Version, Mode=OneWay}" Foreground="CadetBlue"/>
-                        <LineBreak />
-                        <Run Text="no (c) Free as in both 'free speech' and 'free beer'." Foreground="CadetBlue"/>
-                        <Run Text="&#xf259;" FontFamily="{StaticResource FontAwesome}" Foreground="CadetBlue"/>
-                        <LineBreak />
-                        <Run Text="{Binding Path=DockerHandler.OutputText}" />
-                    </Paragraph>
-                </FlowDocument>
-            </RichTextBox>
+            <ScrollViewer Background="#333333" Grid.Row="0" x:Name="scrollViewerOutput"  MinHeight="300"  VerticalScrollBarVisibility="Visible" HorizontalScrollBarVisibility="Disabled">
+                <ItemsControl x:Name="itemsControlOutput" Margin="5" MinHeight="250" ItemsSource="{Binding Path=DockerHandler.OutputDockerResponses, Mode=OneWay}">
+                    <ItemsControl.ItemTemplate>
+                    <DataTemplate >
+                            <TextBlock Text="{Binding Message}" Foreground="{Binding Color}"/>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </ScrollViewer>
+
+
             <TextBox Grid.Row="1" x:Name="textBoxCommand" HorizontalAlignment="Stretch" Height="23" TextWrapping="Wrap" Text="{Binding PreviousCommandHandler.CommandText}" VerticalAlignment="Top" KeyUp="textBoxCommand_KeyUp">
                 <TextBox.InputBindings>
                     <KeyBinding Key="Enter" Command="{Binding OnEnterPressCommand}" CommandParameter="{Binding Text, ElementName=textBoxCommand}"/>
@@ -137,6 +194,24 @@
                     <KeyBinding Key="Down" Command="{Binding PreviousCommandHandler.GetNextInputCommand}" />
                 </TextBox.InputBindings>
             </TextBox>
+
+            <!-- Spinner -->
+            <Border Grid.Row="1" x:Name="OverLay" Background="Black" BorderThickness="0" Visibility="{Binding DockerHandler.IsEnabled, Converter={StaticResource isEnabledToHiddenConverter}}" Opacity="0">
+                <Rectangle x:Name="RectangleSpinner" VerticalAlignment="Center" HorizontalAlignment="Right" Width="10" Height="10" Margin="3,3,30,3" RenderTransformOrigin="0.5,0.5">
+                    <Rectangle.RenderTransform>
+                        <TransformGroup>
+                            <ScaleTransform/>
+                            <SkewTransform/>
+                            <RotateTransform/>
+                        </TransformGroup>
+                    </Rectangle.RenderTransform>
+                    <Rectangle.Fill>
+                        <SolidColorBrush Color="CadetBlue" />
+                    </Rectangle.Fill>
+                </Rectangle>
+            </Border>
+
+
 
         </Grid>
 

@@ -1,6 +1,6 @@
 ﻿namespace Dockutopia.Model
 {
-    public class DockerContainer
+    public class DockerContainer: IDockerEntity
     {
         public static string DockerCommand => @"ps -a --format {{.ID}}\t{{.Image}}\t{{.Command}}\t{{.RunningFor}}\t{{.Status}}\t{{.Ports}}\t{{.Names}}";
         // ALL - https://github.com/Shopify/docker/tree/master/docs/reference/commandline
@@ -24,6 +24,9 @@
 
         public DockerContainer(string[] input)
         {
+            ID = input[0];
+            Name = input[6];
+
             ContainerId = input[0];
             Image = input[1];
             Command = input[2];
@@ -35,6 +38,9 @@
 
         public DockerContainer(params object[] input)
         {
+            ID = (string) input[0];
+            Name = (string)input[6];
+
             ContainerId = (string)input[0];
             Image = (string)input[1];
             Command = (string)input[2];
@@ -43,6 +49,11 @@
             Ports = (string)input[5];
             Names = (string)input[6];
         }
+
+
+        public string ID { get; set; }
+        public string Name { get; set; }
+
 
         public string ContainerId { get; set; }
         public string Image { get; set; }

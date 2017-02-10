@@ -55,5 +55,48 @@ namespace Dockutopia.Tests.Wrapper
 
 
 
+        [TestMethod]
+        public void DockerWrapper_ctrl_c()
+        {
+            //Arrange
+            var command = "stats";
+            var exitString = string.Empty;
+            var outputString = string.Empty;
+            var errorString = string.Empty;
+
+
+            //Act
+            var wrapper = new DockerRepository(command);
+
+            // Run command...
+            wrapper.Exited += delegate { exitString = "exit"; };
+            wrapper.OutputDataReceived += delegate (object o, DataEventArgs e)
+            {
+                outputString = "output";
+                Debug.WriteLine(e.Data);
+            };
+            wrapper.ErrorDataReceived += delegate { errorString = "error"; };
+            wrapper.BeginRun();
+
+            Thread.Sleep(1000);
+
+            wrapper.Kill();
+
+            while (!wrapper.HasExited)
+            {
+                Thread.Sleep(100);
+            }
+
+
+
+
+            //Assert
+            Assert.AreEqual("exit", exitString);
+            Assert.AreEqual("output", outputString);
+            Assert.AreEqual("error", errorString);
+
+
+        }
+
     }
 }

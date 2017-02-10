@@ -62,6 +62,13 @@ namespace Dockutopia.Repository
             }
         }
 
+        public void Kill()
+        {
+           // Only kill this process
+           _process.Kill();
+
+        }
+
         // Write command to standard input.
         public void WriteToStandardInput(string command)
         {

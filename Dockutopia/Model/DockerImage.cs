@@ -1,6 +1,6 @@
 ﻿namespace Dockutopia.Model
 {
-    public class DockerImage
+    public class DockerImage : IDockerEntity
     {
         public static string DockerCommand => @"images --format {{.Repository}}\t{{.Tag}}\t{{.ID}}\t{{.Size}}\t{{.CreatedSince}}";
 
@@ -15,6 +15,9 @@
 
         public DockerImage(string[] input)
         {
+            ID = input[2];
+            Name = input[1];
+
             Repository = input[0];
             Tag = input[1];
             ImageId = input[2];
@@ -24,12 +27,18 @@
 
         public DockerImage(params object[] input)
         {
+            ID = (string)input[2];
+            Name = (string)input[1];
+
             Repository = (string)input[0];
             Tag = (string)input[1];
             ImageId = (string)input[2];
             Size = (string)input[3];
             Created = (string)input[4] + " ago";
         }
+
+        public string ID { get; set; }
+        public string Name { get; set; }
 
 
         public string Repository { get; set; }

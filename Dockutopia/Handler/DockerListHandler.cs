@@ -35,8 +35,8 @@ namespace Dockutopia.Handler
             }
         }
 
-        private DockerContainer _selectedDockerEntity;
-        public DockerContainer SelectedDockerEntity
+        private IDockerEntity _selectedDockerEntity;
+        public IDockerEntity SelectedDockerEntity
         {
             get { return _selectedDockerEntity; }
             set
