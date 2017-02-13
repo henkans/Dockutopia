@@ -21,6 +21,7 @@
     <Window.Resources>
         <converter:StartCommandParamConverter x:Key="startCommandParamConverter" />
         <converter:StopCommandParamConverter x:Key="stopCommandParamConverter" />
+        <converter:RemoveCommandParamConverter x:Key="removeCommandParamConverter" />
         <converter:IpCommandParamConverter x:Key="ipCommandParamConverter" />
         <converter:InspectCommandParamConverter x:Key="inspectCommandParamConverter" />
         <converter:StringToBoolConverter x:Key="stringToBoolConverter" />
@@ -162,9 +163,11 @@
                         <MenuItem Header="Stop" Command="{Binding RunDockerCommandWithRefreshCommand}" CommandParameter="{Binding DockerContainerListHandler.SelectedDockerEntity.Name, Converter={StaticResource stopCommandParamConverter}}"/>
                         <Separator />
                         <MenuItem Header="Inspect">
-                        <MenuItem Header="View IP" Command="{Binding RunDockerCommandWithRefreshCommand}" CommandParameter="{Binding DockerContainerListHandler.SelectedDockerEntity.ID, Converter={StaticResource ipCommandParamConverter}}"/>
-                        <MenuItem Header="Inspect all" Command="{Binding RunDockerCommandWithRefreshCommand}" CommandParameter="{Binding DockerContainerListHandler.SelectedDockerEntity.ID, Converter={StaticResource inspectCommandParamConverter}}"/>
-                        </MenuItem>
+                            <MenuItem Header="All" Command="{Binding RunDockerCommandWithRefreshCommand}" CommandParameter="{Binding DockerContainerListHandler.SelectedDockerEntity.ID, Converter={StaticResource inspectCommandParamConverter}}"/>
+                            <MenuItem Header="IP" Command="{Binding RunDockerCommandWithRefreshCommand}" CommandParameter="{Binding DockerContainerListHandler.SelectedDockerEntity.ID, Converter={StaticResource ipCommandParamConverter}}"/>
+                         </MenuItem>
+                        <Separator />
+                        <MenuItem Header="Remove" Command="{Binding RunDockerCommandWithRefreshCommand}" CommandParameter="{Binding DockerContainerListHandler.SelectedDockerEntity.ID, Converter={StaticResource removeCommandParamConverter}}"/>
                     </ContextMenu>
                     
                 </ListView.ContextMenu>

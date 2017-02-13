@@ -61,11 +61,13 @@
     <Compile Include="Converter\InspectCommandParamConverter.cs" />
     <Compile Include="Converter\IpCommandParamConverter.cs" />
     <Compile Include="Converter\IsEnabledToHiddenConverter.cs" />
+    <Compile Include="Converter\RemoveCommandParamConverter.cs" />
     <Compile Include="Converter\StartCommandParamConverter.cs" />
     <Compile Include="Converter\StopCommandParamConverter.cs" />
     <Compile Include="Converter\StringToBoolConverter.cs" />
     <Compile Include="Handler\DockerHandler.cs" />
     <Compile Include="Handler\DockerListHandler.cs" />
+    <Compile Include="Handler\CommandBuilder.cs" />
     <Compile Include="Handler\PreviousCommandHandler.cs" />
     <Compile Include="Model\DockerContainer.cs" />
     <Compile Include="Model\DockerImage.cs" />
