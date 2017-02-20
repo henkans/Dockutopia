@@ -12,25 +12,40 @@ namespace Dockutopia.Handler
     public static class CommandBuilder 
     {
 
-        
-
-        private static string RunImage(ImageRunArgs imageRunArgs)
+        public static string RunImage(ImageArgs imageArgs)
         {
-            var command = $"run -it -d --name {imageRunArgs.Name} {imageRunArgs.ID} ";
-            if (imageRunArgs.ContainerPort != null && imageRunArgs.HostPort != null)
+            var command = $"run -it -d --name {imageArgs.Name} {imageArgs.ID} ";
+            if (imageArgs.ContainerPort != null && imageArgs.HostPort != null)
             {
-                command += $"-p {imageRunArgs.ContainerPort}:{imageRunArgs.HostPort}";
+                command += $" -p {imageArgs.ContainerPort}:{imageArgs.HostPort}";
             }
+
+            if (imageArgs.Ip != null)
+            {
+                command += $" -ip {imageArgs.Ip} ";
+            }
+
+            if (imageArgs.RunIsolated)
+            {
+                // if linux container run --isolation
+                command += " --isolation=hyperv ";
+            }
+
+            if (imageArgs.ExtraInput != null)
+            {
+                command += $" {imageArgs.ExtraInput}";
+            }
+
             return command;
         }
 
 
-        private static string Run(ImageRunArgs imageRunArgs, string command)
+        private static string Run(ImageArgs imageArgs, string command)
         {
-            var result = $"{command} -it -d --name {imageRunArgs.Name} {imageRunArgs.ID} ";
-            if (imageRunArgs.ContainerPort != null && imageRunArgs.HostPort != null)
+            var result = $"{command} -it -d --name {imageArgs.Name} {imageArgs.ID} ";
+            if (imageArgs.ContainerPort != null && imageArgs.HostPort != null)
             {
-                result += $"-p {imageRunArgs.ContainerPort}:{imageRunArgs.HostPort}";
+                result += $"-p {imageArgs.ContainerPort}:{imageArgs.HostPort}";
             }
             return result;
         }

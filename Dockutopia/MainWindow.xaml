@@ -24,6 +24,8 @@
         <converter:RemoveCommandParamConverter x:Key="removeCommandParamConverter" />
         <converter:IpCommandParamConverter x:Key="ipCommandParamConverter" />
         <converter:InspectCommandParamConverter x:Key="inspectCommandParamConverter" />
+        <converter:ImageInspectCommandParamConverter x:Key="imageInspectCommandParamConverter" />
+        <converter:ImageHistoryCommandParamConverter x:Key="imageHistoryCommandParamConverter" />
         <converter:StringToBoolConverter x:Key="stringToBoolConverter" />
         <converter:IsEnabledToHiddenConverter x:Key="isEnabledToHiddenConverter" />
         <Storyboard x:Key="StoryboardSpinner" RepeatBehavior="Forever">
@@ -39,7 +41,6 @@
         </EventTrigger>
     </Window.Triggers>
 
-
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="30" />
@@ -48,8 +49,7 @@
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
-
-
+        <!--#region ImageRunPopup -->
         <Popup x:Name="ImageRunPopup"  PlacementTarget="{Binding ElementName=listBoxImages}" Placement="Center" Width="300" Margin="0,20,0,0" IsOpen="{Binding RunImageIdPopUp, Converter={StaticResource stringToBoolConverter}}" StaysOpen="False">
             <Border BorderBrush="cadetblue" BorderThickness="1" Background="#333333">
                 <Grid>
@@ -65,26 +65,30 @@
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
        
                     <TextBlock Grid.Row="0" Grid.Column="0" Foreground="WhiteSmoke" VerticalAlignment="Center" Margin="5,10,5,5" Text="Image"/>
                     <TextBlock Grid.Row="0" Grid.Column="1" x:Name="popUpImageId" Foreground="WhiteSmoke" Margin="5,10,5,5" Text="{Binding RunImageIdPopUp}"/>
                     <TextBlock Grid.Row="1" Grid.Column="0" Foreground="WhiteSmoke" VerticalAlignment="Center" Margin="5,0,5,0" Text="Name"/>
-                    <TextBox Grid.Row="1" Grid.Column="1" x:Name="popUpContainerName" Margin="5" Padding="2" Text="{Binding RunImageArgs.Name}"></TextBox>
+                    <TextBox Grid.Row="1" Grid.Column="1" x:Name="popUpContainerName" Margin="5" Padding="2" Text="{Binding ImageArgs.Name}"></TextBox>
                     <TextBlock Grid.Row="2" Grid.Column="0" Foreground="WhiteSmoke" VerticalAlignment="Center" Margin="5,0,5,0" Text="IP"/>
-                    <TextBox Grid.Row="2" Grid.Column="1" x:Name="popUpIp" Margin="5" Padding="2" Text="{Binding RunImageArgs.Ip}"></TextBox>
+                    <TextBox Grid.Row="2" Grid.Column="1" x:Name="popUpIp" Margin="5" Padding="2" Text="{Binding ImageArgs.Ip}"></TextBox>
                     <TextBlock Grid.Row="3" Grid.Column="0" Foreground="WhiteSmoke" VerticalAlignment="Center" Margin="5,0,5,0" Text="Port out"/>
-                    <TextBox Grid.Row="3" Grid.Column="1" x:Name="popUpPortOut" Margin="5" Padding="2" Text="{Binding RunImageArgs.ContainerPort}"></TextBox>
+                    <TextBox Grid.Row="3" Grid.Column="1" x:Name="popUpContainerPort" Margin="5" Padding="2" Text="{Binding ImageArgs.ContainerPort}"></TextBox>
                     <TextBlock Grid.Row="4" Grid.Column="0" Foreground="WhiteSmoke" VerticalAlignment="Center" Margin="5,0,5,0" Text="Port in"/>
-                    <TextBox Grid.Row="4" Grid.Column="1" x:Name="popUpPortIn" Margin="5" Padding="2" Text="{Binding RunImageArgs.HostPort}"></TextBox>
-                    <CheckBox Grid.Row="5" Grid.Column="1" x:Name="popUpIsolated" Margin="5" IsChecked="{Binding RunImageArgs.RunIsolated}">run isolated</CheckBox>
-                    <Button Grid.Row="6" Grid.Column="1" Margin="5" Command="{Binding ImageRunCommand}">Run</Button>
+                    <TextBox Grid.Row="4" Grid.Column="1" x:Name="popUpHostPort" Margin="5" Padding="2" Text="{Binding ImageArgs.HostPort}"></TextBox>
+                    <CheckBox Grid.Row="5" Grid.Column="1" x:Name="popUpIsolated" Margin="5" IsChecked="{Binding ImageArgs.RunIsolated}">run isolated</CheckBox>
+                    <TextBlock Grid.Row="6" Grid.Column="0" Foreground="WhiteSmoke" VerticalAlignment="Center" Margin="5,0,5,0" Text="Other"/>
+                    <TextBox Grid.Row="6" Grid.Column="1" x:Name="popUpExtraInput" Margin="5" Padding="2" Text="{Binding ImageArgs.ExtraInput}"></TextBox>
+
+                    <Button Grid.Row="7" Grid.Column="1" Margin="5" Command="{Binding ImageRunCommand}">Run</Button>
                 </Grid>
             </Border>
         </Popup>
+        <!--#endregion -->
 
-        <!-- Menu grid -->
-
+        <!--#region ToolbarMenu -->
         <Menu Grid.Row="0">
             <MenuItem Header="_File">
                 <MenuItem Header="_Close" MinWidth="100">
@@ -118,13 +122,10 @@
 
         </Menu>
 
-
-        <!-- top grid -->
-
+        <!--#endregion -->
 
         <StackPanel Grid.Row="1" Background="#333333">
             <Label Margin="6,2,6,2" Content="Images" />
-
 
             <ListView x:Name="listBoxImages"  ItemsSource="{Binding DockerImagesListHandler.DockerEntities}" SelectedItem="{Binding DockerImagesListHandler.SelectedDockerEntity}" Margin="0,0,0,0">
                 <ListView.View>
@@ -138,7 +139,12 @@
                 </ListView.View>
                 <ListView.ContextMenu>
                     <ContextMenu x:Name="ImagesContextMenu" MinWidth="100">
-                        <MenuItem Header="Run..." Command="{Binding ImageRunPopupCommand}" CommandParameter="{Binding DockerImagesListHandler.SelectedDockerEntity.ID}"/>
+
+                        <MenuItem Header="Inspect" Command="{Binding RunDockerCommandWithRefreshCommand}" CommandParameter="{Binding DockerImagesListHandler.SelectedDockerEntity.ID, Converter={StaticResource imageInspectCommandParamConverter}}"/>
+                        <MenuItem Header="History" Command="{Binding RunDockerCommandWithRefreshCommand}" CommandParameter="{Binding DockerImagesListHandler.SelectedDockerEntity.ID, Converter={StaticResource imageHistoryCommandParamConverter}}"/>
+
+                        <Separator />
+                        <MenuItem Header="Run..." Command="{Binding ImagePopupCommand}" CommandParameter="{Binding DockerImagesListHandler.SelectedDockerEntity.ID}"/>
                     </ContextMenu>
                 </ListView.ContextMenu>
             </ListView>
@@ -204,7 +210,7 @@
                 </TextBox.InputBindings>
             </TextBox>
 
-            <!-- Spinner -->
+            <!--#region Spinner -->
             <Border Grid.Row="1" x:Name="OverLay" Background="Black" BorderThickness="0" Visibility="{Binding DockerHandler.IsEnabled, Converter={StaticResource isEnabledToHiddenConverter}}" Opacity="0">
                 <Rectangle x:Name="RectangleSpinner" VerticalAlignment="Center" HorizontalAlignment="Right" Width="10" Height="10" Margin="3,3,30,3" RenderTransformOrigin="0.5,0.5">
                     <Rectangle.RenderTransform>
@@ -219,11 +225,9 @@
                     </Rectangle.Fill>
                 </Rectangle>
             </Border>
-
-
+            <!--#endregion -->
 
         </Grid>
-
 
     </Grid>
 

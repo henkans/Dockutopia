@@ -58,6 +58,8 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Converter\ImageHistoryCommandParamConverter.cs" />
+    <Compile Include="Converter\ImageInspectCommandParamConverter.cs" />
     <Compile Include="Converter\InspectCommandParamConverter.cs" />
     <Compile Include="Converter\IpCommandParamConverter.cs" />
     <Compile Include="Converter\IsEnabledToHiddenConverter.cs" />
@@ -73,7 +75,7 @@
     <Compile Include="Model\DockerImage.cs" />
     <Compile Include="Model\DockerResponse.cs" />
     <Compile Include="Model\IDockerEntity.cs" />
-    <Compile Include="Model\ImageRunArgs.cs" />
+    <Compile Include="Model\ImageArgs.cs" />
     <Compile Include="Utils\DockerEntityStringParser.cs" />
     <Compile Include="Utils\StringHelper.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />

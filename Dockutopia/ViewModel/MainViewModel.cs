@@ -16,9 +16,12 @@ namespace Dockutopia.ViewModel
             DockerContainerListHandler = new DockerListHandler<DockerContainer>();
             DockerImagesListHandler = new DockerListHandler<DockerImage>(); //Temp. make generic with DockerListHandler
             PreviousCommandHandler = new PreviousCommandHandler();
-
-            ImageRunPopupCommand = new RelayCommand<string>(ImageRunPopup);
+            
+            // Build complex image commands
+            ImagePopupCommand = new RelayCommand<string>(ImagePopup);
             ImageRunCommand = new RelayCommand(ImageRun);
+            ImageArgs = new ImageArgs();
+
 
 
             //--Kill
@@ -29,14 +32,14 @@ namespace Dockutopia.ViewModel
             RefreshUiCommand = new RelayCommand(RefreshUi);
             RunDockerCommandWithRefreshCommand = new RelayCommand<string>(RunDockerCommandWithRefresh);
 
-            RunImageArgs = new ImageRunArgs();
+            
         }
 
 
-        public ICommand ImageRunPopupCommand { get; set; }
-        private void ImageRunPopup(object command)
+        public ICommand ImagePopupCommand { get; set; }
+        private void ImagePopup(object param)
         {
-            RunImageIdPopUp = command as string;
+            RunImageIdPopUp = param as string;
         }
 
         private string _runImageIdPopUp;
@@ -51,19 +54,13 @@ namespace Dockutopia.ViewModel
         }
 
 
-        public ImageRunArgs RunImageArgs { get; set; }
+        public ImageArgs ImageArgs { get; set; }
         public ICommand ImageRunCommand { get; set; }
         private void ImageRun()
         {
-            var command = $"run -it -d --name {RunImageArgs.Name} {RunImageIdPopUp} ";
-            if (RunImageArgs.ContainerPort != null && RunImageArgs.HostPort != null)
-            {
-                command += $"-p {RunImageArgs.ContainerPort}:{RunImageArgs.HostPort}";
-            }
-
+            var command = CommandBuilder.RunImage(ImageArgs);
             DockerHandler.RunDockerCommand.Execute(command);
-
-            RunImageArgs = new ImageRunArgs();
+            ImageArgs = new ImageArgs();
             RunImageIdPopUp = null;
         }
 
