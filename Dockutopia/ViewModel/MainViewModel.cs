@@ -1,17 +1,28 @@
 ﻿using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Reflection;
 using System.Windows.Input;
 using Dockutopia.Foundation;
 using Dockutopia.Handler;
 using Dockutopia.Model;
+using Dockutopia.Utils;
 
 namespace Dockutopia.ViewModel
 {
-    public class MainNotifyPropertyChanged : NotifyPropertyChangedBase
+    public class MainViewModel : NotifyPropertyChangedBase
     {
         
-        public MainNotifyPropertyChanged()
+        public MainViewModel()
         {
+            if (DockerHelpers.IsSoftwareInstalled("Docker"))
+            {
+                Debug.WriteLine("Docker is installed");
+            }
+            else
+            {
+                { Debug.WriteLine("Docker is NOT installed"); }
+            }
+
             DockerHandler = new DockerHandler();
             DockerContainerListHandler = new DockerListHandler<DockerContainer>();
             DockerImagesListHandler = new DockerListHandler<DockerImage>(); //Temp. make generic with DockerListHandler
@@ -21,9 +32,7 @@ namespace Dockutopia.ViewModel
             ImagePopupCommand = new RelayCommand<string>(ImagePopup);
             ImageRunCommand = new RelayCommand(ImageRun);
             ImageArgs = new ImageArgs();
-
-
-
+            
             //--Kill
             RunDockerKillCommand =new RelayCommand(RunDockerKill);
 
@@ -31,7 +40,6 @@ namespace Dockutopia.ViewModel
             OnEnterPressCommand = new RelayCommand<string>(OnEnterPress);
             RefreshUiCommand = new RelayCommand(RefreshUi);
             RunDockerCommandWithRefreshCommand = new RelayCommand<string>(RunDockerCommandWithRefresh);
-
             
         }
 

@@ -75,7 +75,7 @@ namespace Dockutopia.Tests.Wrapper
                 outputString = "output";
                 Debug.WriteLine(e.Data);
             };
-            wrapper.ErrorDataReceived += delegate { errorString = "error"; };
+            wrapper.ErrorDataReceived += (object o, DataEventArgs e) => { errorString = "error"; };
             wrapper.BeginRun();
 
             Thread.Sleep(1000);

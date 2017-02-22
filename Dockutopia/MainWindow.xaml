@@ -9,7 +9,7 @@
         mc:Ignorable="d"
         Title="Dockutopia" Width="900" Height="700" Loaded="Window_Loaded" ResizeMode="CanResizeWithGrip" Icon="Dockutopia.ico">
     <Window.DataContext>
-        <viewModel:MainNotifyPropertyChanged />
+        <viewModel:MainViewModel />
     </Window.DataContext>
     <Window.InputBindings>
         <KeyBinding Key="F1" Command="{Binding RunDockerCommandWithRefreshCommand}" CommandParameter="help" />
