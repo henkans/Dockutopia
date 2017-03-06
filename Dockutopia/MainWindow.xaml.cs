@@ -50,5 +50,9 @@ namespace Dockutopia
             textBoxCommand.Focus();
         }
 
+        private void MenuItemClose_Click(object sender, RoutedEventArgs e)
+        {
+            Application.Current.Shutdown();
+        }
     }
 }

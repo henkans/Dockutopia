@@ -58,6 +58,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Converter\ContainerAttachCommandParamConverter.cs" />
+    <Compile Include="Converter\ContainerPauseCommandParamConverter.cs" />
+    <Compile Include="Converter\ContainerPortCommandParamConverter.cs" />
+    <Compile Include="Converter\ContainerUnpauseCommandParamConverter.cs" />
     <Compile Include="Converter\ImageHistoryCommandParamConverter.cs" />
     <Compile Include="Converter\ImageInspectCommandParamConverter.cs" />
     <Compile Include="Converter\InspectCommandParamConverter.cs" />

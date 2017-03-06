@@ -22,6 +22,10 @@
         <converter:StartCommandParamConverter x:Key="startCommandParamConverter" />
         <converter:StopCommandParamConverter x:Key="stopCommandParamConverter" />
         <converter:RemoveCommandParamConverter x:Key="removeCommandParamConverter" />
+        <converter:ContainerAttachCommandParamConverter x:Key="containerAttachCommandParamConverter" />
+        <converter:ContainerPauseCommandParamConverter x:Key="containerPauseCommandParamConverter" />
+        <converter:ContainerUnpauseCommandParamConverter x:Key="containerUnpauseCommandParamConverter" />
+        <converter:ContainerPortCommandParamConverter x:Key="containerPortCommandParamConverter" />
         <converter:IpCommandParamConverter x:Key="ipCommandParamConverter" />
         <converter:InspectCommandParamConverter x:Key="inspectCommandParamConverter" />
         <converter:ImageInspectCommandParamConverter x:Key="imageInspectCommandParamConverter" />
@@ -91,7 +95,12 @@
         <!--#region ToolbarMenu -->
         <Menu Grid.Row="0">
             <MenuItem Header="_File">
-                <MenuItem Header="_Close" MinWidth="100">
+                <MenuItem Header="_Refresh (F5)" MinWidth="100" Command="{Binding RefreshUiCommand}">
+                    <MenuItem.Icon>
+                        <TextBlock Text="&#xf021;" FontFamily="{StaticResource FontAwesome}"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Header="_Close" MinWidth="100" Click="MenuItemClose_Click">
                     <MenuItem.Icon>
                         <TextBlock Text="&#xf00d;" FontFamily="{StaticResource FontAwesome}"/>
                     </MenuItem.Icon>
@@ -119,7 +128,6 @@
                     </MenuItem.Icon>
                 </MenuItem>
             </MenuItem>
-
         </Menu>
 
         <!--#endregion -->
@@ -167,13 +175,20 @@
                     <ContextMenu x:Name="ContainersContextMenu" MinWidth="100">
                         <MenuItem Header="Start" Command="{Binding RunDockerCommandWithRefreshCommand}" CommandParameter="{Binding DockerContainerListHandler.SelectedDockerEntity.Name, Converter={StaticResource startCommandParamConverter}}"/>
                         <MenuItem Header="Stop" Command="{Binding RunDockerCommandWithRefreshCommand}" CommandParameter="{Binding DockerContainerListHandler.SelectedDockerEntity.Name, Converter={StaticResource stopCommandParamConverter}}"/>
+                        <MenuItem Header="Port" Command="{Binding RunDockerCommandWithRefreshCommand}" CommandParameter="{Binding DockerContainerListHandler.SelectedDockerEntity.ID, Converter={StaticResource containerPortCommandParamConverter}}"/>
                         <Separator />
                         <MenuItem Header="Inspect">
                             <MenuItem Header="All" Command="{Binding RunDockerCommandWithRefreshCommand}" CommandParameter="{Binding DockerContainerListHandler.SelectedDockerEntity.ID, Converter={StaticResource inspectCommandParamConverter}}"/>
                             <MenuItem Header="IP" Command="{Binding RunDockerCommandWithRefreshCommand}" CommandParameter="{Binding DockerContainerListHandler.SelectedDockerEntity.ID, Converter={StaticResource ipCommandParamConverter}}"/>
                          </MenuItem>
                         <Separator />
+                        <MenuItem Header="Attach" Command="{Binding RunDockerCommandWithRefreshCommand}" CommandParameter="{Binding DockerContainerListHandler.SelectedDockerEntity.ID, Converter={StaticResource containerAttachCommandParamConverter}}"/>
                         <MenuItem Header="Remove" Command="{Binding RunDockerCommandWithRefreshCommand}" CommandParameter="{Binding DockerContainerListHandler.SelectedDockerEntity.ID, Converter={StaticResource removeCommandParamConverter}}"/>
+                        <Separator />
+                        <MenuItem Header="Other">
+                            <MenuItem Header="Pause" Command="{Binding RunDockerCommandWithRefreshCommand}" CommandParameter="{Binding DockerContainerListHandler.SelectedDockerEntity.ID, Converter={StaticResource containerPauseCommandParamConverter}}"/>
+                            <MenuItem Header="Unpause" Command="{Binding RunDockerCommandWithRefreshCommand}" CommandParameter="{Binding DockerContainerListHandler.SelectedDockerEntity.ID, Converter={StaticResource containerUnpauseCommandParamConverter}}"/>
+                        </MenuItem>
                     </ContextMenu>
                     
                 </ListView.ContextMenu>

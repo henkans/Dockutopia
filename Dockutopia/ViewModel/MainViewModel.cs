@@ -14,6 +14,7 @@ namespace Dockutopia.ViewModel
         
         public MainViewModel()
         {
+            // TODO Move to startup
             if (DockerHelpers.IsSoftwareInstalled("Docker"))
             {
                 Debug.WriteLine("Docker is installed");
