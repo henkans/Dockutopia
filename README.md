@@ -1,5 +1,5 @@
 # Dockutopia
-Windows Docker Container UI
-A "semi"-GUI docker terminal made for windows 10.
+## Windows Docker Container UI
+### A "semi"-GUI docker terminal made for windows 10.
 
-![alt tag](https://github.com/thestreetcode/Dockutopia/blob/master/dockutopia.jpg)
+![alt tag](https://github.com/thestreetcode/Dockutopia/blob/master/dockutopia.jpg =640x)
